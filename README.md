@@ -1,6 +1,6 @@
 # SVDB Gateway [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
-![](https://github.com/xver/svdb_gateway/blob/master/doc/svdb_log_min.png)
+![](https://github.com/xver/svdb_gateway/blob/main/docs/svdb_log_min.png)
 
 SQLite Database Gateway for SystemVerilog
 
@@ -169,6 +169,6 @@ python3 sqlite_to_xml.py -i design.db -o design.xml --force-namespace ipxact
 
 Released under the MIT License. See LICENSE file for details.
 
-!["Copyright (c) 2024 IC Verimeter"](https://github.com/xver/svdb_gateway/blob/master/doc/IcVerimeter_logo.png)
+!["Copyright (c) 2024 IC Verimeter"](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
 Copyright (c) 2024 IC Verimeter
 
