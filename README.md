@@ -169,6 +169,6 @@ python3 sqlite_to_xml.py -i design.db -o design.xml --force-namespace ipxact
 
 Released under the MIT License. See LICENSE file for details.
 
-!["Copyright (c) 2024 IC Verimeter"](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
-Copyright (c) 2024 IC Verimeter
+!["Copyright (c) 2025 IC Verimeter"](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
+Copyright (c) 2025 IC Verimeter
 
