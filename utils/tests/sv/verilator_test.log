@@ -1,0 +1,132 @@
+Running simulation...
+Command: ./obj_dir/Vtest_sqlite
+
+
+ id | name | value |
+----|----|----|
+'test_name'  42 
+ id | name | value |
+----|----|----|
+ 1 | 'test_name' | 42 |
+
+
+ id | name | value |
+----|----|----|
+'rollback_test'  100 
+ id | name | value |
+----|----|----|
+ 1 | 'rollback_test' | 100 |
+
+ id | name | value |
+----|----|----|
+
+ integrity_check |
+----|
+ ok |
+
+'multi_row_test_1'  10 
+'multi_row_test_2'  20 
+'multi_row_test_3'  30 
+
+ id | name | value |
+----|----|----|
+ 1 | 'multi_row_test_1' | 10 |
+ 2 | 'multi_row_test_2' | 20 |
+ 3 | 'multi_row_test_3' | 30 |
+
+
+
+
+'create_drop_test'  999 
+ id | name | value |
+----|----|----|
+ 1 | 'create_drop_test' | 999 |
+
+
+ name |
+----|
+ test_index |
+ id | parent | notused | detail |
+----|----|----|----|
+ 3 | 0 | 0 | SEARCH test_table USING INDEX test_index (name=?) |
+
+ name |
+----|
+SQLite Tests: START
+PASS: Opened SQLite database 'test.db' for basic test
+PASS: Closed SQLite database 'test.db' after basic test
+PASS: Basic_sqlite_test @0
+PASS: Opened SQLite database 'test.db' with handle 99280413409064
+PASS: Open SQLite DB test @0
+PASS: Created table 'test_table' with columns: id INTEGER PRIMARY KEY, name TEXT, value INTEGER
+PASS: Verified table 'test_table' exists
+
+Reading database schema:
+PASS: Successfully read schema for table 'test_table'
+
+Table Details:
+  Table Name: test_table
+  Columns:
+    - id INTEGER PRIMARY KEY
+    - name TEXT
+    - value INTEGER
+PASS: Table Schema Operations test @0
+Initial table contents:
+PASS: Retrieved initial table contents
+PASS: Inserted row with ID 1 into table 'test_table'
+  Columns: name, value
+  Values: 'test_name', 42
+
+Table contents after insert:
+PASS: Retrieved table contents after insert
+PASS: Retrieved row 1 from table 'test_table'
+PASS: Deleted row 1 from table 'test_table'
+PASS: Successfully committed transaction
+PASS: Table Row Operations test @0
+Initial table contents before rollback test:
+PASS: Retrieved initial table contents
+PASS: Inserted temporary row with ID 1 into table 'test_table'
+
+Table contents after insert but before rollback:
+PASS: Retrieved table contents after insert
+PASS: Successfully rolled back transaction
+
+Table contents after rollback:
+PASS: Retrieved table contents after rollback
+PASS: Transaction Rollback test @0
+Testing database vacuum operation
+PASS: Successfully vacuumed database
+Verifying database is still accessible after vacuum:
+PASS: Database integrity check passed after vacuum
+PASS: Database Vacuum test @0
+Testing get_all_rows functionality on 'test_table'
+Table contents before get_all_rows test:
+PASS: Successfully retrieved all rows from table 'test_table'
+      Retrieved 3 rows with 3 columns each
+PASS: Multi-Row Operations test @0
+Testing explicit table creation for 'test_create_drop_table'
+PASS: Created table 'test_create_drop_table' with columns: id INTEGER PRIMARY KEY, name TEXT, value INTEGER
+PASS: Verified table 'test_create_drop_table' exists after creation
+PASS: Inserted test row with ID 1 into 'test_create_drop_table'
+Table contents after insertion:
+Testing explicit table drop for 'test_create_drop_table'
+PASS: Dropped table 'test_create_drop_table'
+PASS: Verified table 'test_create_drop_table' no longer exists after drop
+PASS: Table Create/Drop test @0
+Testing index creation on table 'test_table', column 'name'
+PASS: Created index 'test_index' on table 'test_table', column 'name'
+Verifying index existence:
+PASS: Verified index 'test_index' exists
+Running a query that should use the index:
+PASS: Successfully ran an indexed query
+Testing index drop for 'test_index'
+PASS: Dropped index 'test_index'
+Verifying index no longer exists:
+PASS: Verified index 'test_index' no longer exists
+PASS: Index Operations test @0
+PASS: Closed SQLite database with handle 99280413409064
+PASS: Close SQLite DB test @0
+OVERALL TEST RESULT: PASS @0
+Tests Passed: 10, Tests Failed: 0, Total: 10
+- test_sqlite.sv:94: Verilog $finish
+Simulation complete. Test log file generated: ./verilator_test.log
