@@ -35,8 +35,8 @@ class XMLToSQLite:
     #
     # Initialize the converter with database path and configuration.
     #
-    # Parameter: db_path - Path to the SQLite database file
-    # Parameter: debug  - Enable debug logging if True
+    # Parameters: db_path - Path to the SQLite database file
+    #           debug  - Enable debug logging if True
     def __init__(self, db_path: str, debug: bool = False):
         """Initialize the converter with database path."""
         self.db_path = db_path
@@ -123,9 +123,9 @@ class XMLToSQLite:
     #
     # Get text content from XML element with namespace.
     #
-    # Parameter: element   - XML element to search in
-    # Parameter: tag      - Tag name to find
-    # Parameter: namespace - Namespace prefix (default: 'spirit')
+    # Parameters: element   - XML element to search in
+    #           tag      - Tag name to find
+    #           namespace - Namespace prefix (default: 'spirit')
     # Returns: Text content or None if not found
     def get_text(self, element: ET.Element, tag: str, namespace: str = 'spirit') -> Optional[str]:
         """Get text content from XML element with namespace."""
@@ -159,8 +159,8 @@ class XMLToSQLite:
     #
     # Insert metadata into database.
     #
-    # Parameter: root      - Root XML element
-    # Parameter: file_path - Path to source XML file
+    # Parameters: root      - Root XML element
+    #           file_path - Path to source XML file
     # Returns: ID of inserted metadata record
     def insert_metadata(self, root: ET.Element, file_path: str) -> int:
         """Insert metadata into database and return metadata_id."""
@@ -197,8 +197,8 @@ class XMLToSQLite:
     #
     # Store original XML content to preserve formatting and structure.
     #
-    # Parameter: metadata_id - ID of the metadata record
-    # Parameter: file_path   - Path to source XML file
+    # Parameters: metadata_id - ID of the metadata record
+    #           file_path   - Path to source XML file
     # Returns: True if successful, False otherwise
     def store_original_xml(self, metadata_id: int, file_path: str):
         """Store the original XML content to preserve formatting, comments, and structure."""
@@ -232,8 +232,8 @@ class XMLToSQLite:
     #
     # Insert memory maps into database.
     #
-    # Parameter: root       - Root XML element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: root       - Root XML element
+    #           metadata_id - ID of the metadata record
     def insert_memory_maps(self, root: ET.Element, metadata_id: int):
         """Insert memory maps into database."""
         memory_maps = root.findall('.//{*}memoryMap')
@@ -260,8 +260,8 @@ class XMLToSQLite:
     #
     # Insert address blocks into database.
     #
-    # Parameter: memory_map - Memory map XML element
-    # Parameter: memory_map_id - ID of the memory map
+    # Parameters: memory_map - Memory map XML element
+    #           memory_map_id - ID of the memory map
     def insert_address_blocks(self, memory_map: ET.Element, memory_map_id: int):
         """Insert address blocks into database."""
         address_blocks = memory_map.findall('.//{*}addressBlock')
@@ -305,8 +305,8 @@ class XMLToSQLite:
     #
     # Insert registers into database.
     #
-    # Parameter: address_block - Address block XML element
-    # Parameter: address_block_id - ID of the address block
+    # Parameters: address_block - Address block XML element
+    #           address_block_id - ID of the address block
     def insert_registers(self, address_block: ET.Element, address_block_id: int):
         """Insert registers into database."""
         # Find registers with explicit namespace
@@ -382,8 +382,8 @@ class XMLToSQLite:
     #
     # Insert fields into database.
     #
-    # Parameter: register - Register XML element
-    # Parameter: register_id - ID of the register
+    # Parameters: register - Register XML element
+    #           register_id - ID of the register
     def insert_fields(self, register: ET.Element, register_id: int):
         """Insert fields into database."""
         # Find fields with explicit namespace
@@ -489,8 +489,8 @@ class XMLToSQLite:
     #
     # Insert bus interfaces into database.
     #
-    # Parameter: root       - Root XML element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: root       - Root XML element
+    #           metadata_id - ID of the metadata record
     def insert_bus_interfaces(self, root: ET.Element, metadata_id: int):
         """Insert bus interfaces into database."""
         bus_interfaces = root.findall('.//{*}busInterface')
@@ -544,8 +544,8 @@ class XMLToSQLite:
     #
     # Insert ports into database.
     #
-    # Parameter: root       - Root XML element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: root       - Root XML element
+    #           metadata_id - ID of the metadata record
     def insert_ports(self, root: ET.Element, metadata_id: int):
         """Insert ports into database."""
         ports = root.findall('.//{*}port')
@@ -663,8 +663,8 @@ class XMLToSQLite:
     #
     # Insert parameters into database.
     #
-    # Parameter: root       - Root XML element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: root       - Root XML element
+    #           metadata_id - ID of the metadata record
     def insert_parameters(self, root: ET.Element, metadata_id: int):
         """Insert parameters into database."""
         parameters = root.findall('.//{*}parameter')
@@ -706,8 +706,8 @@ class XMLToSQLite:
     #
     # Insert vendor extensions into database.
     #
-    # Parameter: root       - Root XML element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: root       - Root XML element
+    #           metadata_id - ID of the metadata record
     def insert_vendor_extensions(self, root: ET.Element, metadata_id: int):
         """Insert vendor extensions into database."""
         vendor_extensions = root.find('.//{*}vendorExtensions')
@@ -753,8 +753,8 @@ class XMLToSQLite:
     #
     # Insert enumerations into database.
     #
-    # Parameter: field    - Field XML element
-    # Parameter: field_id - ID of the field
+    # Parameters: field    - Field XML element
+    #           field_id - ID of the field
     def insert_enumerations(self, field: ET.Element, field_id: int):
         """Insert enumerations into database."""
         enumerations = field.findall('.//{*}enumeratedValue')
@@ -778,7 +778,7 @@ class XMLToSQLite:
     #
     # Process XML file and convert to SQLite database.
     #
-    # Parameter: xml_file - Path to input XML file
+    # Parameters: xml_file - Path to input XML file
     def process_xml_file(self, xml_file: str):
         """Process a single XML file and insert its data into the database."""
         try:
@@ -850,8 +850,8 @@ class XMLToSQLite:
     #
     # Extract component elements from XML content.
     #
-    # Parameter: xml_content - XML content as string
-    # Parameter: component_tag - Component tag name
+    # Parameters: xml_content - XML content as string
+    #           component_tag - Component tag name
     # Returns: List of component elements
     def _extract_components(self, xml_content: str, component_tag: str) -> list:
         """Extract component XML sections from the content.

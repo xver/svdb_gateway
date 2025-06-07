@@ -37,10 +37,10 @@ class SQLiteToXML:
     #
     # Initialize the converter with database path and configuration options.
     #
-    # Parameter: db_path         - Path to the SQLite database file
-    # Parameter: debug          - Enable debug logging if True
-    # Parameter: force_namespace - Force specific namespace (ipxact or spirit)
-    # Parameter: validate_schema - Validate database schema against schema.sql
+    # Parameters: db_path         - Path to the SQLite database file
+    #           debug          - Enable debug logging if True
+    #           force_namespace - Force specific namespace (ipxact or spirit)
+    #           validate_schema - Validate database schema against schema.sql
     def __init__(self, db_path: str, debug: bool = False, force_namespace: Optional[str] = None, validate_schema: bool = False):
         """Initialize the converter with database path."""
         self.db_path = db_path
@@ -164,7 +164,7 @@ class SQLiteToXML:
     #
     # Parse schema.sql content to extract table column definitions.
     #
-    # Parameter: schema_content - Content of schema.sql file
+    # Parameters: schema_content - Content of schema.sql file
     # Returns: Dictionary of table definitions with required columns
     def _parse_schema_columns(self, schema_content: str) -> Dict[str, Dict[str, List[str]]]:
         """Parse the schema.sql content to extract table column definitions."""
@@ -240,7 +240,7 @@ class SQLiteToXML:
     #
     # Retrieve original XML content if available in database.
     #
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: metadata_id - ID of the metadata record
     # Returns: Original XML content or None if not found
     def get_original_xml(self, metadata_id: int) -> Optional[str]:
         """Get the original XML content if available in the database."""
@@ -277,7 +277,7 @@ class SQLiteToXML:
     #
     # Create root component element with appropriate namespaces.
     #
-    # Parameter: metadata - Component metadata from database
+    # Parameters: metadata - Component metadata from database
     # Returns: Root XML element
     def create_component_element(self, metadata: sqlite3.Row) -> ET.Element:
         """Create the root component element with appropriate namespaces."""
@@ -348,8 +348,8 @@ class SQLiteToXML:
     #
     # Add memory maps to the component element.
     #
-    # Parameter: component  - Parent component element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: component  - Parent component element
+    #           metadata_id - ID of the metadata record
     def add_memory_maps(self, component: ET.Element, metadata_id: int) -> None:
         """Add memory maps to the component element."""
         # Get namespace prefix from the component tag
@@ -430,8 +430,8 @@ class SQLiteToXML:
     #
     # Add address blocks to the memory map element.
     #
-    # Parameter: memory_map - Parent memory map element
-    # Parameter: memory_map_id - ID of the memory map
+    # Parameters: memory_map - Parent memory map element
+    #           memory_map_id - ID of the memory map
     def add_address_blocks(self, memory_map: ET.Element, memory_map_id: int) -> None:
         """Add address blocks to the memory map element."""
         # Get namespace prefix from the memory map tag
@@ -537,8 +537,8 @@ class SQLiteToXML:
     #
     # Add registers to the address block element.
     #
-    # Parameter: address_block - Parent address block element
-    # Parameter: address_block_id - ID of the address block
+    # Parameters: address_block - Parent address block element
+    #           address_block_id - ID of the address block
     def add_registers(self, address_block: ET.Element, address_block_id: int) -> None:
         """Add registers to the address block element."""
         # Get namespace prefix from the address block tag
@@ -750,8 +750,8 @@ class SQLiteToXML:
     #
     # Add fields to the register element.
     #
-    # Parameter: register - Parent register element
-    # Parameter: register_id - ID of the register
+    # Parameters: register - Parent register element
+    #           register_id - ID of the register
     def add_fields(self, register: ET.Element, register_id: int) -> None:
         """Add fields to the register element."""
         # Get namespace prefix from the register tag
@@ -869,8 +869,8 @@ class SQLiteToXML:
     #
     # Add enumerations to the field element.
     #
-    # Parameter: field - Parent field element
-    # Parameter: field_id - ID of the field
+    # Parameters: field - Parent field element
+    #           field_id - ID of the field
     def add_enumerations(self, field: ET.Element, field_id: int) -> None:
         """Add enumerations to the field element."""
         # Get namespace prefix from the field tag
@@ -919,8 +919,8 @@ class SQLiteToXML:
     #
     # Add bus interfaces to the component element.
     #
-    # Parameter: component - Parent component element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: component - Parent component element
+    #           metadata_id - ID of the metadata record
     def add_bus_interfaces(self, component: ET.Element, metadata_id: int) -> None:
         """Add bus interfaces to the component element."""
         # Get namespace prefix from the component tag
@@ -1065,8 +1065,8 @@ class SQLiteToXML:
     #
     # Add vendor extensions to the component element.
     #
-    # Parameter: component - Parent component element
-    # Parameter: metadata_id - ID of the metadata record
+    # Parameters: component - Parent component element
+    #           metadata_id - ID of the metadata record
     def add_vendor_extensions(self, component: ET.Element, metadata_id: int) -> None:
         """Add vendor extensions to the component element."""
         # Get namespace prefix from the component tag
@@ -1109,7 +1109,7 @@ class SQLiteToXML:
     #
     # Convert SQLite database to XML and save to output file.
     #
-    # Parameter: output_file - Path to output XML file
+    # Parameters: output_file - Path to output XML file
     # Returns: True if conversion successful, False otherwise
     def convert_to_xml(self, output_file: str) -> bool:
         """Convert SQLite database to XML and save to output file."""
