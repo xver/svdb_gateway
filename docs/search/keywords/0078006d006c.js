@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("xml",["File","Class"],[["xml_to_sqlite",,[[,"xml_to_sqlite.py",,,0,"File4:xml_to_sqlite.py:xml_to_sqlite.py"]]],["XMLToSQLite",,[[,,,,1,"File4:xml_to_sqlite.py:XMLToSQLite","PythonClass:XMLToSQLite"]]]]);

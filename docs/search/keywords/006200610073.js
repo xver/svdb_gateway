@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("bas",["Function"],[["basic_sqlite_test",,[["test_sqlite",,,,0,"File5:sv/test_sqlite.sv:test_sqlite.basic_sqlite_test","SystemVerilogModule:test_sqlite:basic_sqlite_test"]]]]);

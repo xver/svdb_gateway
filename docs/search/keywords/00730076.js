@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sv",["File"],[["sv",,[[,"sqlite_dpi_pkg.sv",,,0,"File3:sqlite_dpi_pkg.sv:sqlite_dpi_pkg.sv"],[,"test_sqlite.sv",,,0,"File5:sv/test_sqlite.sv:test_sqlite.sv"]]]]);

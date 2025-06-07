@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("mul",["Function","Section"],[["multi_row_operations_test",,[["test_sqlite",,,,0,"File5:sv/test_sqlite.sv:test_sqlite.multi_row_operations_test","SystemVerilogModule:test_sqlite:multi_row_operations_test"]]],["Multi-Row",,[[,"Multi-Row Operations",,,1,"File2:sqlite_dpi.h:Multi-Row_Operations"]]]]);

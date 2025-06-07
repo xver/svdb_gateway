@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("man",["Section"],[["Management",,[[,"Index Management",,,0,"File2:sqlite_dpi.h:Index_Management"]]]]);

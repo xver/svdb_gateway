@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("tes",["Module","File"],[["test_sqlite",,[[,,,,0,"File5:sv/test_sqlite.sv:test_sqlite","SystemVerilogModule:test_sqlite"],[,"test_sqlite.sv",,,1,"File5:sv/test_sqlite.sv:test_sqlite.sv"]]]]);

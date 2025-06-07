@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("_ex",["Function"],[["_extract_components",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite._extract_components","PythonClass:XMLToSQLite:_extract_components"]]]]);

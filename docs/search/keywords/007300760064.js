@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("svd",["Variable","File"],[["svdb_long_t",,[["t_vpi_vecval",,,,0,"File:svdb_typedef.h:t_vpi_vecval.svdb_long_t","CClass:t_vpi_vecval:svdb_long_t"]]],["svdb_typedef",,[[,"svdb_typedef.h",,,1,"File:svdb_typedef.h:svdb_typedef.h"]]]]);

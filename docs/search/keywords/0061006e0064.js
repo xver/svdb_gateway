@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("and",["Section"],[["and",,[[,"Data exchange structures and utilities",,,0,"File3:sqlite_dpi_pkg.sv:Data_exchange_structures_and_utilities"]]]]);

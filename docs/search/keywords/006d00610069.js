@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("mai",["Function","Section"],[["main",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.main","PythonClass:XMLToSQLite:main"]]],["Maintenance",,[[,"Database Maintenance",,,1,"File2:sqlite_dpi.h:Database_Maintenance"]]]]);

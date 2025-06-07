@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("svo",["Variable"],[["svOpenArrayHandle",,[[,,,,0,"File:svdb_typedef.h:svOpenArrayHandle"]]]]);

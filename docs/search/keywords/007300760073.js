@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("svs",["Variable"],[["svScalar",,[[,,,,0,"File:svdb_typedef.h:svScalar"]]]]);

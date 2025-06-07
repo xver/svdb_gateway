@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("cal",["Function"],[["calculate_checksum",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.calculate_checksum","PythonClass:XMLToSQLite:calculate_checksum"]]]]);

@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("ind",["Section","Function"],[["Index",,[[,"Index Management",,,0,"File2:sqlite_dpi.h:Index_Management"]]],["index_operations_test",,[["test_sqlite",,,,1,"File5:sv/test_sqlite.sv:test_sqlite.index_operations_test","SystemVerilogModule:test_sqlite:index_operations_test"]]]]);

@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("svb",["Variable"],[["svBit",,[[,,,,0,"File:svdb_typedef.h:svBit"]]],["svBitVecVal",,[[,,,,0,"File:svdb_typedef.h:svBitVecVal"]]]]);

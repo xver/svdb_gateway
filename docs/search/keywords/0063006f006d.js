@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("com",["Section"],[["Common",,[[,"Common defines",,,0,"File:svdb_typedef.h:Common_defines"]]]]);

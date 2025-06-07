@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("inl",["Macro"],[["INLINE",,[[,,,,0,"File:svdb_typedef.h:INLINE"]]]]);

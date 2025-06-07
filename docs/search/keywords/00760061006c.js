@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("val",["Function"],[["validate_database_schema",,[["SQLiteToXML",,,,0,"File4:sqlite_to_xml.py:SQLiteToXML.validate_database_schema","PythonClass:SQLiteToXML:validate_database_schema"]]]]);

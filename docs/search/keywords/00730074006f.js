@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sto",["Function"],[["store_original_xml",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.store_original_xml","PythonClass:XMLToSQLite:store_original_xml"]]]]);
