@@ -30,11 +30,15 @@ svdb_gateway/
 │   │   ├── sqlite_to_xml.py  # SQLite to XML converter
 │   │   └── schema.sql        # Database schema
 │   └── tests/          # Test cases
-│       └── sv/         # SystemVerilog tests
-│           ├── test_sqlite.sv    # Main test file
-│           ├── sim_main.cpp      # C++ simulation entry
-│           ├── cs_common.svh     # Common definitions
-│           └── Makefile          # Test build rules
+│       ├── sv/         # SystemVerilog tests
+│       │   ├── test_sqlite.sv    # Main test file
+│       │   ├── sim_main.cpp      # C++ simulation entry
+│       │   ├── cs_common.svh     # Common definitions
+│       │   └── Makefile          # Test build rules
+│       └── py/         # Python tests
+│           ├── test_xml_to_sqlite.py  # Test for xml_to_sqlite.py
+│           ├── test_sqlite_to_xml.py  # Test for sqlite_to_xml.py
+│           └── Makefile          # Makefile for running Python tests
 └── README.md           # This file
 ```
 
@@ -179,6 +183,34 @@ python3 sqlite_to_xml.py -i design.db -o design.xml -d --validate-schema
 # Convert SQLite to XML forcing IP-XACT namespace
 python3 sqlite_to_xml.py -i design.db -o design.xml --force-namespace ipxact
 ```
+
+## Python Tests
+
+The project includes Python tests to verify the functionality of the Python utilities. These tests are located in the `utils/tests/py` directory.
+
+### Running Python Tests
+
+To run the Python tests, navigate to the `utils/tests/py` directory and use the provided Makefile:
+
+```bash
+cd utils/tests/py
+make
+```
+
+This will execute all available tests. You can also run individual tests using the following commands:
+
+- `make test_xml_to_sqlite`: Run the test for `xml_to_sqlite.py`.
+- `make test_sqlite_to_xml`: Run the test for `sqlite_to_xml.py`.
+- `make help`: Display help information for the available targets.
+
+### Makefile Help
+
+The Makefile in the `utils/tests/py` directory includes the following targets:
+
+- `all`: Run all tests (default target).
+- `test_xml_to_sqlite`: Run the test for `xml_to_sqlite.py`.
+- `test_sqlite_to_xml`: Run the test for `sqlite_to_xml.py`.
+- `help`: Display help information for the available targets.
 
 ## License
 
