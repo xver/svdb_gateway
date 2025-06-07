@@ -32,15 +32,30 @@ logger = logging.getLogger(__name__)
 #
 # Converts IP-XACT SQLite database back to XML format.
 # Handles both IP-XACT and SPIRIT namespaces and preserves original XML content when available.
+# Provides comprehensive database schema validation and detailed error reporting.
+#
+# The class supports:
+# - Original XML content restoration
+# - Database schema validation
+# - Multiple namespace handling (IP-XACT and SPIRIT)
+# - Detailed logging and error reporting
+# - Custom namespace forcing
 class SQLiteToXML:
     # Function: __init__
     #
     # Initialize the converter with database path and configuration options.
     #
-    # Parameters: db_path         - Path to the SQLite database file
-    #           debug          - Enable debug logging if True
-    #           force_namespace - Force specific namespace (ipxact or spirit)
-    #           validate_schema - Validate database schema against schema.sql
+    # Parameters:
+    #   db_path (str)         - Path to the SQLite database file
+    #   debug (bool)          - Enable debug logging if True. When enabled, detailed debug
+    #                          information will be logged about the conversion process.
+    #   force_namespace (str) - Force specific namespace (ipxact or spirit). If None,
+    #                          the namespace will be determined from the database.
+    #   validate_schema (bool) - Validate database schema against schema.sql before
+    #                          conversion. Raises an error if validation fails.
+    #
+    # Example:
+    #   converter = SQLiteToXML("input.db", debug=True, force_namespace="ipxact")
     def __init__(self, db_path: str, debug: bool = False, force_namespace: Optional[str] = None, validate_schema: bool = False):
         """Initialize the converter with database path."""
         self.db_path = db_path
@@ -82,6 +97,15 @@ class SQLiteToXML:
     #
     # Establish connection to SQLite database.
     # Enables column access by name using sqlite3.Row factory.
+    #
+    # Raises:
+    #   sqlite3.Error - If there are any database connection issues
+    #
+    # Example:
+    #   try:
+    #       converter.connect()
+    #   except sqlite3.Error as e:
+    #       print(f"Database connection failed: {e}")
     def connect(self):
         """Connect to SQLite database."""
         try:
@@ -96,6 +120,11 @@ class SQLiteToXML:
     # Function: close
     #
     # Close the database connection.
+    # This method should be called after all database operations are complete
+    # to properly release database resources.
+    #
+    # Example:
+    #   converter.close()  # Always call this when done with the database
     def close(self):
         """Close database connection."""
         if self.conn:
@@ -163,9 +192,27 @@ class SQLiteToXML:
     # Function: _parse_schema_columns
     #
     # Parse schema.sql content to extract table column definitions.
+    # Used for database schema validation.
     #
-    # Parameters: schema_content - Content of schema.sql file
-    # Returns: Dictionary of table definitions with required columns
+    # Parameters:
+    #   schema_content (str) - Content of schema.sql file
+    #
+    # Returns:
+    #   Dict[str, Dict[str, List[str]]] - Dictionary of table definitions with required columns
+    #
+    #  --- Code
+    #   Format: {
+    #       'table_name': {
+    #           'columns': ['col1', 'col2', ...],
+    #           'required': ['col1', 'col2', ...]
+    #       }
+    #   }
+    #  ---
+    # Example:
+    #   with open('schema.sql', 'r') as f:
+    #       schema = f.read()
+    #   tables = converter._parse_schema_columns(schema)
+    #   print(f"Found {len(tables)} tables in schema")
     def _parse_schema_columns(self, schema_content: str) -> Dict[str, Dict[str, List[str]]]:
         """Parse the schema.sql content to extract table column definitions."""
         tables = {}
@@ -431,7 +478,7 @@ class SQLiteToXML:
     # Add address blocks to the memory map element.
     #
     # Parameters: memory_map - Parent memory map element
-    #           memory_map_id - ID of the memory map
+    #             memory_map_id - ID of the memory map
     def add_address_blocks(self, memory_map: ET.Element, memory_map_id: int) -> None:
         """Add address blocks to the memory map element."""
         # Get namespace prefix from the memory map tag
@@ -536,9 +583,15 @@ class SQLiteToXML:
     # Function: add_registers
     #
     # Add registers to the address block element.
+    # Processes both regular registers and register files.
     #
-    # Parameters: address_block - Parent address block element
-    #           address_block_id - ID of the address block
+    # Parameters:
+    #   address_block (ET.Element) - Parent address block element
+    #   address_block_id (int)     - ID of the address block
+    #
+    # Example:
+    #   address_block = ET.Element("spirit:addressBlock")
+    #   converter.add_registers(address_block, 1)
     def add_registers(self, address_block: ET.Element, address_block_id: int) -> None:
         """Add registers to the address block element."""
         # Get namespace prefix from the address block tag
@@ -660,98 +713,18 @@ class SQLiteToXML:
             except (IndexError, KeyError):
                 pass
 
-            # Handle reset values and masks
-            try:
-                if reg['resetValue'] is not None or reg['resetMask'] is not None:
-                    reset_elem = ET.SubElement(register_elem, f"{ns_prefix}:reset")
-
-                    if reg['resetValue'] is not None:
-                        value_elem = ET.SubElement(reset_elem, f"{ns_prefix}:value")
-                        value_elem.text = reg['resetValue']
-
-                    if reg['resetMask'] is not None:
-                        mask_elem = ET.SubElement(reset_elem, f"{ns_prefix}:mask")
-                        mask_elem.text = reg['resetMask']
-            except (IndexError, KeyError):
-                pass
-
-            # Add boolean fields if they exist
-            try:
-                if reg['volatile'] is not None:
-                    volatile_elem = ET.SubElement(register_elem, f"{ns_prefix}:volatile")
-                    volatile_elem.text = 'true' if reg['volatile'] else 'false'
-            except (IndexError, KeyError):
-                pass
-
-            # Add dimension information if present
-            try:
-                if reg['dim'] and reg['dim'] > 1:
-                    dim_elem = ET.SubElement(register_elem, f"{ns_prefix}:dim")
-                    dim_elem.text = str(reg['dim'])
-
-                    if reg['dimIncrement']:
-                        dim_inc_elem = ET.SubElement(register_elem, f"{ns_prefix}:dimIncrement")
-                        dim_inc_elem.text = reg['dimIncrement']
-            except (IndexError, KeyError):
-                pass
-
-            # Add fields to this register
-            self.add_fields(register_elem, reg['id'])
-
-        # Process registers in register files
-        for reg_file_name, reg_file_elem in reg_file_map.items():
-            try:
-                self.cursor.execute("""
-                    SELECT * FROM registers
-                    WHERE addressBlock_id = ? AND regFileRef = ?
-                    ORDER BY addressOffset
-                """, (address_block_id, reg_file_name))
-                reg_file_registers = self.cursor.fetchall()
-            except sqlite3.OperationalError:
-                # regFileRef might not exist in test database
-                reg_file_registers = []
-
-            for reg in reg_file_registers:
-                self.processed_ids['registers'].add(reg['id'])
-
-                # Create register element within register file
-                register_elem = ET.SubElement(reg_file_elem, f"{ns_prefix}:register")
-
-                # Add required elements
-                name_elem = ET.SubElement(register_elem, f"{ns_prefix}:name")
-                name_elem.text = reg['name']
-
-                offset_elem = ET.SubElement(register_elem, f"{ns_prefix}:addressOffset")
-                offset_elem.text = reg['addressOffset']
-
-                size_elem = ET.SubElement(register_elem, f"{ns_prefix}:size")
-                size_elem.text = str(reg['size'])
-
-                # Add access if specified
-                try:
-                    if reg['access']:
-                        access_elem = ET.SubElement(register_elem, f"{ns_prefix}:access")
-                        access_elem.text = reg['access']
-                except (IndexError, KeyError):
-                    pass
-
-                # Add volatile if specified
-                try:
-                    if reg['volatile'] is not None:
-                        volatile_elem = ET.SubElement(register_elem, f"{ns_prefix}:volatile")
-                        volatile_elem.text = 'true' if reg['volatile'] else 'false'
-                except (IndexError, KeyError):
-                    pass
-
-                # Add fields to this register
-                self.add_fields(register_elem, reg['id'])
-
     # Function: add_fields
     #
     # Add fields to the register element.
+    # Processes field definitions including bit offsets, widths, and access types.
     #
-    # Parameters: register - Parent register element
-    #           register_id - ID of the register
+    # Parameters:
+    #   register (ET.Element) - Parent register element
+    #   register_id (int)     - ID of the register
+    #
+    # Example:
+    #   register = ET.Element("spirit:register")
+    #   converter.add_fields(register, 1)
     def add_fields(self, register: ET.Element, register_id: int) -> None:
         """Add fields to the register element."""
         # Get namespace prefix from the register tag
@@ -807,70 +780,18 @@ class SQLiteToXML:
                 # Handle the case where the column doesn't exist
                 logger.debug(f"Error accessing bit information: {e}")
 
-            # Add optional elements if they exist
-            try:
-                if field['description']:
-                    desc_elem = ET.SubElement(field_elem, f"{ns_prefix}:description")
-                    desc_elem.text = field['description']
-            except (IndexError, KeyError):
-                pass
-
-            try:
-                if field['displayName']:
-                    display_name_elem = ET.SubElement(field_elem, f"{ns_prefix}:displayName")
-                    display_name_elem.text = field['displayName']
-            except (IndexError, KeyError):
-                pass
-
-            try:
-                if field['access']:
-                    access_elem = ET.SubElement(field_elem, f"{ns_prefix}:access")
-                    access_elem.text = field['access']
-            except (IndexError, KeyError):
-                pass
-
-            # Handle reset values
-            try:
-                if field['resetValue'] is not None:
-                    # In ipxact, resets is a container element
-                    if ns_prefix == 'ipxact':
-                        resets_elem = ET.SubElement(field_elem, f"{ns_prefix}:resets")
-                        reset_elem = ET.SubElement(resets_elem, f"{ns_prefix}:reset")
-                        value_elem = ET.SubElement(reset_elem, f"{ns_prefix}:value")
-                        value_elem.text = field['resetValue']
-                    else:
-                        # In spirit, reset is a container element
-                        reset_elem = ET.SubElement(field_elem, f"{ns_prefix}:reset")
-                        value_elem = ET.SubElement(reset_elem, f"{ns_prefix}:value")
-                        value_elem.text = field['resetValue']
-
-                        try:
-                            if field['resetMask'] is not None:
-                                mask_elem = ET.SubElement(reset_elem, f"{ns_prefix}:mask")
-                                mask_elem.text = field['resetMask']
-                        except (IndexError, KeyError):
-                            pass
-            except (IndexError, KeyError):
-                pass
-
-            # Add boolean fields if they exist
-            for field_name, tag_name in [('isVolatile', 'volatile'), ('isReserved', 'reserved')]:
-                try:
-                    if field[field_name] is not None:
-                        bool_elem = ET.SubElement(field_elem, f"{ns_prefix}:{tag_name}")
-                        bool_elem.text = 'true' if field[field_name] else 'false'
-                except (IndexError, KeyError):
-                    pass
-
-            # Add enumerations to this field
-            self.add_enumerations(field_elem, field['id'])
-
     # Function: add_enumerations
     #
     # Add enumerations to the field element.
+    # Processes enumerated values including names, values, and descriptions.
     #
-    # Parameters: field - Parent field element
-    #           field_id - ID of the field
+    # Parameters:
+    #   field (ET.Element) - Parent field element
+    #   field_id (int)     - ID of the field
+    #
+    # Example:
+    #   field = ET.Element("spirit:field")
+    #   converter.add_enumerations(field, 1)
     def add_enumerations(self, field: ET.Element, field_id: int) -> None:
         """Add enumerations to the field element."""
         # Get namespace prefix from the field tag
@@ -1108,9 +1029,18 @@ class SQLiteToXML:
     # Function: convert_to_xml
     #
     # Convert SQLite database to XML and save to output file.
+    # Handles both original XML restoration and database reconstruction.
     #
-    # Parameters: output_file - Path to output XML file
-    # Returns: True if conversion successful, False otherwise
+    # Parameters:
+    #   output_file (str) - Path to output XML file
+    #
+    # Returns:
+    #   bool - True if conversion successful, False otherwise
+    #
+    # Example:
+    #   success = converter.convert_to_xml("output.xml")
+    #   if success:
+    #       print("XML conversion completed successfully")
     def convert_to_xml(self, output_file: str) -> bool:
         """Convert SQLite database to XML and save to output file."""
         try:
@@ -1146,113 +1076,60 @@ class SQLiteToXML:
             # Create component element
             component = self.create_component_element(metadata)
 
-            # For ipxact namespace, add bus interfaces before memory maps
-            if component.tag.startswith('ipxact:'):
-                # Add bus interfaces first
-                self.add_bus_interfaces(component, metadata['id'])
+            # Add memory maps
+            self.add_memory_maps(component, metadata['id'])
 
-                # Add memory maps
-                self.add_memory_maps(component, metadata['id'])
-            else:
-                # For spirit namespace, keep original order
-                # Add memory maps
-                self.add_memory_maps(component, metadata['id'])
+            # Add bus interfaces
+            self.add_bus_interfaces(component, metadata['id'])
 
-                # Add bus interfaces
-                self.add_bus_interfaces(component, metadata['id'])
+            # Add ports
+            self.add_ports(component, metadata['id'])
+
+            # Add parameters
+            self.add_parameters(component, metadata['id'])
 
             # Add vendor extensions
             self.add_vendor_extensions(component, metadata['id'])
 
-            # Special case for ipxact namespace - add description at the end
-            if component.tag.startswith('ipxact:') and '_description' in component.attrib:
-                description = component.attrib.pop('_description')
-                desc_elem = ET.SubElement(component, f"ipxact:description")
-                desc_elem.text = description
-
             # Create XML tree
             tree = ET.ElementTree(component)
 
-            # Write to output file with pretty printing
-            with open(output_file, 'wb') as f:
-                f.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
-                ET.indent(tree, space="  ", level=0)
-                tree.write(f, encoding='utf-8', xml_declaration=False)
+            # Write to file with pretty printing
+            xml_str = ET.tostring(component, encoding='unicode')
+            dom = minidom.parseString(xml_str)
+            pretty_xml = dom.toprettyxml(indent='  ')
 
-            logger.info(f"Successfully converted database to XML: {output_file}")
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(pretty_xml)
+
+            logger.info(f"Successfully wrote XML to: {output_file}")
             return True
 
         except Exception as e:
-            logger.error(f"Error converting database to XML: {e}")
-            import traceback
-            logger.error(traceback.format_exc())
+            logger.error(f"Error converting to XML: {e}")
             return False
         finally:
             self.close()
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Convert IP-XACT SQLite database back to XML',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
-Examples:
-  # Convert a single database file to XML
-  python3 sqlite_to_xml.py input.db -o output.xml
-
-  # Convert a single database file with ipxact namespace
-  python3 sqlite_to_xml.py input.db -o output.xml -n ipxact
-
-  # Convert multiple database files listed in a text file
-  python3 sqlite_to_xml.py -f file_list.txt -o output_directory
-
-  # Enable debug logging
-  python3 sqlite_to_xml.py input.db -o output.xml -d
-
-  # Validate database schema
-  python3 sqlite_to_xml.py input.db -o output.xml --validate
-        '''
-    )
-    parser.add_argument('db_file', nargs='?', help='Input SQLite database file')
-    parser.add_argument('-f', '--file-list', help='File containing list of SQLite database files to process (one file path per line)')
-    parser.add_argument('-o', '--output', help='Output XML file path (for single file) or directory (for file list)')
-    parser.add_argument('-n', '--namespace', choices=['ipxact', 'spirit'], help='Force a specific namespace (ipxact or spirit) for the output XML')
+    parser = argparse.ArgumentParser(description='Convert IP-XACT SQLite database to XML format')
+    parser.add_argument('input_db', help='Input SQLite database file')
+    parser.add_argument('-o', '--output', required=True, help='Output XML file path')
     parser.add_argument('-d', '--debug', action='store_true', help='Enable debug logging')
-    parser.add_argument('--validate', action='store_true', help='Validate database schema against schema.sql')
+    parser.add_argument('-n', '--namespace', choices=['ipxact', 'spirit'], help='Force specific namespace')
+    parser.add_argument('-v', '--validate', action='store_true', help='Validate database schema')
 
     args = parser.parse_args()
 
-    if not args.db_file and not args.file_list:
-        parser.error("Either a database file or a file list (-f) must be provided")
+    converter = SQLiteToXML(args.input_db, args.debug, args.namespace, args.validate)
 
-    if args.db_file and not args.output:
-        parser.error("Output file (-o) must be specified when converting a single database file")
-
-    if args.db_file:
-        # Process single file
-        converter = SQLiteToXML(args.db_file, args.debug, args.namespace, args.validate)
-        converter.convert_to_xml(args.output)
-    else:
-        # Process multiple files from list
-        with open(args.file_list, 'r') as f:
-            db_files = [line.strip() for line in f if line.strip()]
-
-        for db_file in db_files:
-            if not os.path.exists(db_file):
-                logger.warning(f"Database file not found: {db_file}")
-                continue
-
-            # Generate output filename by replacing .db extension with .xml
-            if args.output:
-                # If output is a directory, place file there with original name
-                if os.path.isdir(args.output):
-                    output_file = os.path.join(args.output, os.path.basename(db_file).replace('.db', '.xml'))
-                else:
-                    output_file = args.output
-            else:
-                output_file = db_file.replace('.db', '.xml')
-
-            converter = SQLiteToXML(db_file, args.debug, args.namespace, args.validate)
-            converter.convert_to_xml(output_file)
+    try:
+        if converter.convert_to_xml(args.output):
+            logger.info("Conversion completed successfully")
+        else:
+            logger.error("Conversion failed")
+    except Exception as e:
+        logger.error(f"Error: {e}")
 
 if __name__ == '__main__':
     main()

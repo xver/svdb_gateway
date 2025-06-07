@@ -6,7 +6,8 @@
 # Project Information
 # ------------------------------------------------------------------------
 
-Title: SystemVerilog/SQLite SVDB Gateway
+Title: SVDB Gateway
+Subtitle: Bridge between SystemVerilog and SQLite databases
 
 Copyright: Copyright © 2025 IC Verimeter
 
@@ -126,7 +127,6 @@ Source Folder 6: ../examples
 
 # Source Filtering
 # ------------------------------------------------------------------------
-
 
 # If there are any subfolders in the source code that you would like Natural
 # Docs to ignore they can be added here.  If you use any of these options on

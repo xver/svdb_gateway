@@ -13,4 +13,9 @@ help:
 	@echo "  all              - Run all tests"
 	@echo "  test_xml_to_sqlite - Run test for xml_to_sqlite.py"
 	@echo "  test_sqlite_to_xml - Run test for sqlite_to_xml.py"
+	@echo "  clean            - Remove test artifacts (__pycache__, .pytest_cache, .pyc files)"
 	@echo "  help             - Display this help message"
+
+clean:
+	rm -rf __pycache__ .pytest_cache *.pyc
+	@echo "Cleaned test artifacts."

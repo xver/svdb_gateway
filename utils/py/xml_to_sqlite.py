@@ -30,13 +30,26 @@ logger = logging.getLogger(__name__)
 #
 # Converts IP-XACT XML files to SQLite database format.
 # Handles both IP-XACT and SPIRIT namespaces and preserves original XML content.
+# Provides comprehensive XML parsing, database schema management, and error reporting.
+#
+# The class supports:
+# - Multiple XML file processing
+# - Original XML content preservation
+# - Detailed logging and error reporting
+# - Schema validation and management
+# - Support for both IP-XACT and SPIRIT namespaces
 class XMLToSQLite:
     # Function: __init__
     #
     # Initialize the converter with database path and configuration.
     #
-    # Parameters: db_path - Path to the SQLite database file
-    #           debug  - Enable debug logging if True
+    # Parameters:
+    #   db_path (str) - Path to the SQLite database file. The file will be created if it doesn't exist.
+    #   debug (bool)  - Enable debug logging if True. When enabled, detailed debug information
+    #                  will be logged about the conversion process.
+    #
+    # Example:
+    #   converter = XMLToSQLite("output.db", debug=True)
     def __init__(self, db_path: str, debug: bool = False):
         """Initialize the converter with database path."""
         self.db_path = db_path
@@ -53,6 +66,16 @@ class XMLToSQLite:
     # Function: connect
     #
     # Establish connection to SQLite database.
+    # Creates a new database file if it doesn't exist.
+    #
+    # Raises:
+    #   sqlite3.Error - If there are any database connection issues
+    #
+    # Example:
+    #   try:
+    #       converter.connect()
+    #   except sqlite3.Error as e:
+    #       print(f"Database connection failed: {e}")
     def connect(self):
         """Connect to SQLite database."""
         try:
@@ -66,6 +89,11 @@ class XMLToSQLite:
     # Function: close
     #
     # Close the database connection.
+    # This method should be called after all database operations are complete
+    # to properly release database resources.
+    #
+    # Example:
+    #   converter.close()  # Always call this when done with the database
     def close(self):
         """Close database connection."""
         if self.conn:
@@ -75,7 +103,27 @@ class XMLToSQLite:
     # Function: create_tables
     #
     # Create database tables from schema.sql.
-    # Drops existing tables if they exist.
+    # Drops existing tables if they exist to ensure a clean state.
+    # The schema includes tables for:
+    # - metadata: Component metadata and version information
+    # - memoryMaps: Memory map definitions
+    # - addressBlocks: Address block definitions
+    # - registers: Register definitions
+    # - fields: Field definitions within registers
+    # - busInterfaces: Bus interface definitions
+    # - ports: Port definitions
+    # - parameters: Parameter definitions
+    # - vendorExtensions: Vendor-specific extensions
+    # - enumerations: Enumerated values for fields
+    #
+    # Raises:
+    #   Exception - If there are any issues creating the tables
+    #
+    # Example:
+    #   try:
+    #       converter.create_tables()
+    #   except Exception as e:
+    #       print(f"Failed to create tables: {e}")
     def create_tables(self):
         """Create database tables from schema.sql."""
         try:
@@ -111,9 +159,17 @@ class XMLToSQLite:
     # Function: calculate_checksum
     #
     # Calculate MD5 checksum of a file.
+    # Used to verify file integrity and detect changes.
     #
-    # Parameter: file_path - Path to the file
-    # Returns: MD5 checksum as hexadecimal string
+    # Parameters:
+    #   file_path (str) - Path to the file to calculate checksum for
+    #
+    # Returns:
+    #   str - MD5 checksum as hexadecimal string
+    #
+    # Example:
+    #   checksum = converter.calculate_checksum("input.xml")
+    #   print(f"File checksum: {checksum}")
     def calculate_checksum(self, file_path: str) -> str:
         """Calculate MD5 checksum of a file."""
         with open(file_path, 'rb') as f:
@@ -122,11 +178,20 @@ class XMLToSQLite:
     # Function: get_text
     #
     # Get text content from XML element with namespace.
+    # Handles both IP-XACT and SPIRIT namespaces.
     #
-    # Parameters: element   - XML element to search in
-    #           tag      - Tag name to find
-    #           namespace - Namespace prefix (default: 'spirit')
-    # Returns: Text content or None if not found
+    # Parameters:
+    #   element (ET.Element) - XML element to search in
+    #   tag (str)           - Tag name to find
+    #   namespace (str)     - Namespace prefix (default: 'spirit')
+    #
+    # Returns:
+    #   Optional[str] - Text content if found, None otherwise
+    #
+    # Example:
+    #   name = converter.get_text(element, 'name', 'spirit')
+    #   if name:
+    #       print(f"Found name: {name}")
     def get_text(self, element: ET.Element, tag: str, namespace: str = 'spirit') -> Optional[str]:
         """Get text content from XML element with namespace."""
         try:
@@ -158,10 +223,19 @@ class XMLToSQLite:
     # Function: insert_metadata
     #
     # Insert metadata into database.
+    # Extracts and stores component metadata including vendor, library,
+    # name, version, and description.
     #
-    # Parameters: root      - Root XML element
-    #           file_path - Path to source XML file
-    # Returns: ID of inserted metadata record
+    # Parameters:
+    #   root (ET.Element) - Root XML element
+    #   file_path (str)   - Path to source XML file
+    #
+    # Returns:
+    #   int - ID of inserted metadata record
+    #
+    # Example:
+    #   metadata_id = converter.insert_metadata(root, "input.xml")
+    #   print(f"Inserted metadata with ID: {metadata_id}")
     def insert_metadata(self, root: ET.Element, file_path: str) -> int:
         """Insert metadata into database and return metadata_id."""
         vendor = self.get_text(root, 'vendor') or ''
@@ -196,10 +270,20 @@ class XMLToSQLite:
     # Function: store_original_xml
     #
     # Store original XML content to preserve formatting and structure.
+    # This ensures that the original XML can be reconstructed exactly
+    # when converting back from the database.
     #
-    # Parameters: metadata_id - ID of the metadata record
-    #           file_path   - Path to source XML file
-    # Returns: True if successful, False otherwise
+    # Parameters:
+    #   metadata_id (int) - ID of the metadata record
+    #   file_path (str)   - Path to source XML file
+    #
+    # Returns:
+    #   bool - True if successful, False otherwise
+    #
+    # Example:
+    #   success = converter.store_original_xml(metadata_id, "input.xml")
+    #   if success:
+    #       print("Original XML stored successfully")
     def store_original_xml(self, metadata_id: int, file_path: str):
         """Store the original XML content to preserve formatting, comments, and structure."""
         try:
@@ -894,6 +978,16 @@ class XMLToSQLite:
 #
 # Main entry point for the script.
 # Parses command line arguments and processes XML files.
+#
+# Command line arguments:
+#   xml_file - Input XML file (optional if -f is used)
+#   -f, --file-list - File containing list of XML files to process
+#   -o, --output - Output SQLite database path (required)
+#   -d, --debug - Enable debug logging
+#
+# Example usage:
+#   python xml_to_sqlite.py input.xml -o output.db
+#   python xml_to_sqlite.py -f file_list.txt -o output.db -d
 def main():
     parser = argparse.ArgumentParser(description='Convert IP-XACT XML files to SQLite database')
     parser.add_argument('xml_file', nargs='?', help='Input XML file')
