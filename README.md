@@ -46,10 +46,25 @@ svdb_gateway/
 ## Requirements
 
 - C/C++ compiler (GCC recommended)
+  - GCC 9.4.0 or later
+  - Clang 12.0.0 or later
 - SQLite development libraries
+  - SQLite 3.37.0 or later
+  - libsqlite3-dev package
 - For testing SystemVerilog code:
-  - Verilator
-  - Make
+  - Verilator 5.014 or later
+  - Make 4.3 or later
+- For Python utilities:
+  - Python 3.8.0 or later
+  - Required Python packages (all built-in):
+    - `sqlite3` (3.8.0 or later)
+    - `xml.etree.ElementTree` (3.8.0 or later)
+    - `argparse` (3.8.0 or later)
+    - `hashlib` (3.8.0 or later)
+    - `datetime` (3.8.0 or later)
+    - `logging` (3.8.0 or later)
+    - `typing` (3.8.0 or later)
+    - `os` (3.8.0 or later)
 
 ## Building
 
