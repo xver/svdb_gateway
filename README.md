@@ -40,7 +40,7 @@ svdb_gateway/
 │           └── Makefile          # Makefile for running Python tests
 └── README.md           # This file
 ```
-## Documentation
+## HTML Documentation
  [API](https://rawcdn.githack.com/xver/svdb_gateway/006cad2a8c055f7b520c0ee1efae61d0952c2629/docs/index.html)
 ## Features
 
