@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("classes.js",[[2,"C/C++","CClass:",[[1,"t_vpi_vecval"]]],[2,"Python","PythonClass:",[[1,"SQLiteToXML"],[1,"XMLToSQLite"]]]]);
+﻿NDMenu.OnSectionLoaded("classes.js",[[1,"SQLiteToXML"],[1,"XMLToSQLite"]]);

@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("svl",["Variable"],[["svLogic",,[[,,,,0,"File:svdb_typedef.h:svLogic"]]],["svLogicVecVal",,[["t_vpi_vecval",,,,0,"File:svdb_typedef.h:t_vpi_vecval.svLogicVecVal","CClass:t_vpi_vecval:svLogicVecVal"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("svl",["Variable"],[["svLogic",,[[,,,,0,"File:svdb_typedef.h:svLogic"]]],["svLogicVecVal",,[[,,,,0,"File:svdb_typedef.h:svLogicVecVal"]]]]);

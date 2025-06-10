@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sin",["Section"],[["Single",,[[,"Single Row/Column Operations",,,0,"File:sqlite_primitive.h:Single_Row/Column_Operations"]]]]);

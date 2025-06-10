@@ -1,1 +1,0 @@
-﻿NDFramePage.OnPageTitleLoaded("CClass:t_vpi_vecval","t_vpi_vecval");NDSummary.OnSummaryLoaded("CClass:t_vpi_vecval",[["C/C++","C"]],[["Groups","Group"],["Structs","Struct"],["Variables","Variable"]],[[99,0,1,"t_vpi_vecval"],[100,0,0,"Variables","Variables"],[101,0,2,"svLogicVecVal","svLogicVecVal"],[102,0,2,"svdb_long_t","svdb_long_t"]]);

@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("h",["File"],[["h",,[[,"sqlite_dpi.h",,,0,"File2:sqlite_dpi.h:sqlite_dpi.h"],[,"svdb_typedef.h",,,0,"File:svdb_typedef.h:svdb_typedef.h"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("h",["File"],[["h",,[[,"sqlite_dpi.h",,,0,"File2:sqlite_dpi.h:sqlite_dpi.h"],[,"sqlite_primitive.h",,,0,"File:sqlite_primitive.h:sqlite_primitive.h"],[,"svdb_typedef.h",,,0,"File:svdb_typedef.h:svdb_typedef.h"]]]]);

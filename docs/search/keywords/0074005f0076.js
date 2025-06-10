@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("t_v",["Struct"],[["t_vpi_vecval",,[[,,,,0,"File:svdb_typedef.h:t_vpi_vecval","CClass:t_vpi_vecval"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("t_v",["Variable"],[["t_vpi_vecval",,[[,,,,0,"File:svdb_typedef.h:t_vpi_vecval"]]]]);

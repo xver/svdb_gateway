@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("man",["Section"],[["Management",,[[,"Index Management",,,0,"File2:sqlite_dpi.h:Index_Management"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("man",["Section"],[["Management",,[[,"Connection Management",,,0,"File:sqlite_primitive.h:Connection_Management"],[,"Index Management",,,0,"File:sqlite_primitive.h:Index_Management"]]]]);

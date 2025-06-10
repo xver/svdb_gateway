@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("cre",["Function"],[["create_component_element",,[["SQLiteToXML",,,,0,"File4:sqlite_to_xml.py:SQLiteToXML.create_component_element","PythonClass:SQLiteToXML:create_component_element"]]],["create_tables",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.create_tables","PythonClass:XMLToSQLite:create_tables"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("cre",["Function"],[["create_tables",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.create_tables","PythonClass:XMLToSQLite:create_tables"]]]]);

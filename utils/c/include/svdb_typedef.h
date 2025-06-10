@@ -88,7 +88,7 @@ Handle for SystemVerilog open arrays
 typedef void* svOpenArrayHandle;
 
 /*
-Struct: t_vpi_vecval
+Variable: t_vpi_vecval
 Structure for VPI vector values containing aval and bval fields
 */
 

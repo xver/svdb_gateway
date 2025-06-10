@@ -7,6 +7,7 @@
 
 SVDB Gateway provides a bridge between SystemVerilog and SQLite databases, allowing SystemVerilog code to interact with SQLite databases through a Direct Programming Interface (DPI).
 
+
 ## Project Structure
 
 ```
@@ -46,6 +47,9 @@ svdb_gateway/
 
 - SQLite database operations from SystemVerilog
 - Complete DPI bridge for database operations
+
+### Support
+Whether you need assistance with the **SVDV Gateawy** integration into your project or customization, please contact us at icshunt.help@gmail.com
 
 ## Requirements
 
