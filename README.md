@@ -50,6 +50,7 @@ svdb_gateway/
 
 ### Support
 Whether you need assistance with the **SVDV Gateawy** integration into your project or customization, please contact us at icshunt.help@gmail.com
+Please, report bugs to [Issues](https://github.com/xver/svdb_gateway/issues)
 
 ## Requirements
 
