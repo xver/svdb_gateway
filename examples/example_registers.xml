@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ipxact:component xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd">
+    <ipxact:vendor>example</ipxact:vendor>
+    <ipxact:library>registers</ipxact:library>
+    <ipxact:name>register_example</ipxact:name>
+    <ipxact:version>1.0</ipxact:version>
+    <ipxact:description>Example component with different register types</ipxact:description>
+
+    <ipxact:memoryMaps>
+        <ipxact:memoryMap>
+            <ipxact:name>main_memory_map</ipxact:name>
+            <ipxact:addressBlock>
+                <ipxact:name>register_block</ipxact:name>
+                <ipxact:baseAddress>0x0</ipxact:baseAddress>
+                <ipxact:range>0x1000</ipxact:range>
+                <ipxact:width>32</ipxact:width>
+
+                <!-- Read-Only Register -->
+                <ipxact:register>
+                    <ipxact:name>status_register</ipxact:name>
+                    <ipxact:addressOffset>0x0</ipxact:addressOffset>
+                    <ipxact:size>32</ipxact:size>
+                    <ipxact:access>read-only</ipxact:access>
+                    <ipxact:description>Status register containing system state information</ipxact:description>
+                    <ipxact:fields>
+                        <ipxact:field>
+                            <ipxact:name>system_ready</ipxact:name>
+                            <ipxact:bitOffset>0</ipxact:bitOffset>
+                            <ipxact:bitWidth>1</ipxact:bitWidth>
+                            <ipxact:access>read-only</ipxact:access>
+                            <ipxact:description>Indicates if the system is ready</ipxact:description>
+                        </ipxact:field>
+                    </ipxact:fields>
+                </ipxact:register>
+
+                <!-- Write-Only Register -->
+                <ipxact:register>
+                    <ipxact:name>control_register</ipxact:name>
+                    <ipxact:addressOffset>0x4</ipxact:addressOffset>
+                    <ipxact:size>32</ipxact:size>
+                    <ipxact:access>write-only</ipxact:access>
+                    <ipxact:description>Control register for system configuration</ipxact:description>
+                    <ipxact:fields>
+                        <ipxact:field>
+                            <ipxact:name>reset_system</ipxact:name>
+                            <ipxact:bitOffset>0</ipxact:bitOffset>
+                            <ipxact:bitWidth>1</ipxact:bitWidth>
+                            <ipxact:access>write-only</ipxact:access>
+                            <ipxact:description>Writing 1 resets the system</ipxact:description>
+                        </ipxact:field>
+                    </ipxact:fields>
+                </ipxact:register>
+
+                <!-- Read-Write Register -->
+                <ipxact:register>
+                    <ipxact:name>configuration_register</ipxact:name>
+                    <ipxact:addressOffset>0x8</ipxact:addressOffset>
+                    <ipxact:size>32</ipxact:size>
+                    <ipxact:access>read-write</ipxact:access>
+                    <ipxact:description>Configuration register for system settings</ipxact:description>
+                    <ipxact:fields>
+                        <ipxact:field>
+                            <ipxact:name>operation_mode</ipxact:name>
+                            <ipxact:bitOffset>0</ipxact:bitOffset>
+                            <ipxact:bitWidth>2</ipxact:bitWidth>
+                            <ipxact:access>read-write</ipxact:access>
+                            <ipxact:description>Operation mode selection</ipxact:description>
+                            <ipxact:enumeratedValues>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>mode_normal</ipxact:name>
+                                    <ipxact:value>0</ipxact:value>
+                                </ipxact:enumeratedValue>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>mode_power_save</ipxact:name>
+                                    <ipxact:value>1</ipxact:value>
+                                </ipxact:enumeratedValue>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>mode_high_performance</ipxact:name>
+                                    <ipxact:value>2</ipxact:value>
+                                </ipxact:enumeratedValue>
+                            </ipxact:enumeratedValues>
+                        </ipxact:field>
+                    </ipxact:fields>
+                </ipxact:register>
+
+                <!-- Read-WriteOnce Register -->
+                <ipxact:register>
+                    <ipxact:name>security_register</ipxact:name>
+                    <ipxact:addressOffset>0xC</ipxact:addressOffset>
+                    <ipxact:size>32</ipxact:size>
+                    <ipxact:access>read-writeOnce</ipxact:access>
+                    <ipxact:description>Security configuration register that can only be written once</ipxact:description>
+                    <ipxact:fields>
+                        <ipxact:field>
+                            <ipxact:name>security_level</ipxact:name>
+                            <ipxact:bitOffset>0</ipxact:bitOffset>
+                            <ipxact:bitWidth>2</ipxact:bitWidth>
+                            <ipxact:access>read-writeOnce</ipxact:access>
+                            <ipxact:description>Security level configuration</ipxact:description>
+                            <ipxact:enumeratedValues>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>level_low</ipxact:name>
+                                    <ipxact:value>0</ipxact:value>
+                                </ipxact:enumeratedValue>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>level_medium</ipxact:name>
+                                    <ipxact:value>1</ipxact:value>
+                                </ipxact:enumeratedValue>
+                                <ipxact:enumeratedValue>
+                                    <ipxact:name>level_high</ipxact:name>
+                                    <ipxact:value>2</ipxact:value>
+                                </ipxact:enumeratedValue>
+                            </ipxact:enumeratedValues>
+                        </ipxact:field>
+                    </ipxact:fields>
+                </ipxact:register>
+            </ipxact:addressBlock>
+        </ipxact:memoryMap>
+    </ipxact:memoryMaps>
+</ipxact:component>

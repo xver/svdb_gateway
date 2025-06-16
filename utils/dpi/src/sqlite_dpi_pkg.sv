@@ -173,44 +173,45 @@ import "DPI-C" function int sqlite_dpi_get_row(input chandle db, input string ta
 `endif
 
 /*
-Function: sqlite_dpi_insert_row
-Inserts a row into a table
+Function: sqlite_dpi_get_rowid_by_column_value
+Retrieves the first row ID that matches a specific column value
 
 Parameters:
 
    db - Database handle.
-   table - Table name.
-   columns - JSON string containing column names.
-   values - JSON string containing values to insert.
+   table_name - Name of the table.
+   column - Name of the column to search in.
+   value - Value to search for.
 
 Returns:
 
-   ID of the inserted row, -1 on failure.
+   Row ID if found, -1 if not found or on error.
 
-Note: Can be disabled with `define NO_SQLITE_DPI_INSERT_ROW
+Note: Can be disabled with `define NO_SQLITE_DPI_GET_ROWID_BY_COLUMN_VALUE
 */
-`ifndef NO_SQLITE_DPI_INSERT_ROW
-import "DPI-C" function int sqlite_dpi_insert_row(input chandle db, input string table_name, input string columns, input string values);
+`ifndef NO_SQLITE_DPI_GET_ROWID_BY_COLUMN_VALUE
+import "DPI-C" function int sqlite_dpi_get_rowid_by_column_value(input chandle db, input string table_name, input string column, input string value);
 `endif
 
 /*
-Function: sqlite_dpi_delete_row
-Deletes a row from a table
+Function: sqlite_dpi_get_cell_value
+Retrieves the value of a specific cell (column in a row)
 
 Parameters:
 
    db - Database handle.
-   table - Table name.
-   row_id - ID of the row to delete.
+   table_name - Name of the table.
+   row_id - ID of the row.
+   column - Name of the column.
 
 Returns:
 
-   0 on success, -1 on failure.
+   The cell value as a string, or an empty string on error.
 
-Note: Can be disabled with `define NO_SQLITE_DPI_DELETE_ROW
+Note: Can be disabled with `define NO_SQLITE_DPI_GET_CELL_VALUE
 */
-`ifndef NO_SQLITE_DPI_DELETE_ROW
-import "DPI-C" function int sqlite_dpi_delete_row(input chandle db, input string table_name, input int row_id);
+`ifndef NO_SQLITE_DPI_GET_CELL_VALUE
+import "DPI-C" function string sqlite_dpi_get_cell_value(input chandle db, input string table_name, input int row_id, input string column);
 `endif
 
 /*
@@ -231,6 +232,26 @@ Note: Can be disabled with `define NO_SQLITE_DPI_CREATE_TABLE
 */
 `ifndef NO_SQLITE_DPI_CREATE_TABLE
 import "DPI-C" function int sqlite_dpi_create_table(input chandle db, input string table_name, input string columns);
+`endif
+
+/*
+Function: sqlite_dpi_delete_row
+Deletes a row from a table
+
+Parameters:
+
+   db - Database handle.
+   table - Table name.
+   row_id - ID of the row to delete.
+
+Returns:
+
+   0 on success, -1 on failure.
+
+Note: Can be disabled with `define NO_SQLITE_DPI_DELETE_ROW
+*/
+`ifndef NO_SQLITE_DPI_DELETE_ROW
+import "DPI-C" function int sqlite_dpi_delete_row(input chandle db, input string table_name, input int row_id);
 `endif
 
 /*
@@ -374,6 +395,27 @@ Note: Can be disabled with `define NO_SQLITE_DPI_VACUUM_DATABASE
 */
 `ifndef NO_SQLITE_DPI_VACUUM_DATABASE
 import "DPI-C" function int sqlite_dpi_vacuum_database(input chandle db);
+`endif
+
+/*
+Function: sqlite_dpi_insert_row
+Inserts a row into a table
+
+Parameters:
+
+   db - Database handle.
+   table - Table name.
+   columns - JSON string containing column names.
+   values - JSON string containing values to insert.
+
+Returns:
+
+   ID of the inserted row, -1 on failure.
+
+Note: Can be disabled with `define NO_SQLITE_DPI_INSERT_ROW
+*/
+`ifndef NO_SQLITE_DPI_INSERT_ROW
+import "DPI-C" function int sqlite_dpi_insert_row(input chandle db, input string table_name, input string columns, input string values);
 `endif
 
 endpackage

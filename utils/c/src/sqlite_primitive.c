@@ -73,6 +73,7 @@ int sqlite_prim_execute_query(sqlite3 *db, const char *query) {
     int col_count = sqlite3_column_count(stmt);
     dbg_print("C_PRIM", "sqlite_prim_execute_query", "Query result columns: %d\n", col_count);
 
+#ifdef VERBOSE
     dbg_print("C_PRIM", "sqlite_prim_execute_query", "|");
     for (int i = 0; i < col_count; i++) {
         fprintf(stderr, " %s |", sqlite3_column_name(stmt, i));
@@ -96,6 +97,12 @@ int sqlite_prim_execute_query(sqlite3 *db, const char *query) {
         }
         fprintf(stderr, "\n");
     }
+#else
+    // Execute query without printing results
+    while ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+        // Just step through the results without printing
+    }
+#endif
 
     if (result != SQLITE_DONE) {
         err_print("C_PRIM", "sqlite_prim_execute_query", "SQL error: %s\n", sqlite3_errmsg(db));
@@ -110,6 +117,36 @@ int sqlite_prim_execute_query(sqlite3 *db, const char *query) {
 /************************************************
  * Single Row/Column Operations
  ************************************************/
+
+const char* sqlite_prim_get_cell_value(sqlite3* db, const char* table, int row_id, const char* column) {
+    sqlite3_stmt* stmt;
+    char query[512];
+    const char* result = NULL;
+
+    dbg_print("C_PRIM", "sqlite_prim_get_cell_value", "Getting value for column '%s' in row %d from table '%s'\n", column, row_id, table);
+
+    snprintf(query, sizeof(query), "SELECT \"%s\" FROM %s WHERE rowid = ?;", column, table);
+
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, NULL) != SQLITE_OK) {
+        err_print("C_PRIM", "sqlite_prim_get_cell_value", "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    sqlite3_bind_int(stmt, 1, row_id);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        const unsigned char* text = sqlite3_column_text(stmt, 0);
+        if (text) {
+            result = strdup((const char*)text);
+        }
+    } else {
+        err_print("C_PRIM", "sqlite_prim_get_cell_value", "No row found with rowid %d or other SQL error: %s\n", row_id, sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    dbg_print("C_PRIM", "sqlite_prim_get_cell_value", "Returning value: %s\n", result ? result : "NULL");
+    return result;
+}
 
 int sqlite_prim_get_row(sqlite3 *db, const char *table, int row_id, char ***columns, char ***values, int *col_count) {
     char query[256];
@@ -165,11 +202,14 @@ int sqlite_prim_insert_row(sqlite3 *db, const char *table, const char **columns,
     }
 
     dbg_print("C_PRIM", "sqlite_prim_insert_row", "Columns: %s\n", cols);
+
+#ifdef VERBOSE
     dbg_print("C_PRIM", "sqlite_prim_insert_row", "Values: ");
     for (int i = 0; i < count; i++) {
         fprintf(stderr, "%s ", values[i]);
     }
     fprintf(stderr, "\n");
+#endif
 
     snprintf(query, sizeof(query), "INSERT INTO %s (%s) VALUES (%s)", table, cols, vals);
 
@@ -342,19 +382,107 @@ int sqlite_prim_vacuum_database(sqlite3 *db) {
 int sqlite_prim_table_exists(sqlite3 *db, const char *table_name) {
     char query[256];
     sqlite3_stmt *stmt;
+    int exists = 0;
 
-    snprintf(query, sizeof(query), "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s';", table_name);
+    snprintf(query, sizeof(query), "SELECT name FROM sqlite_master WHERE type='table' AND name='%s';", table_name);
 
     if (sqlite3_prepare_v2(db, query, -1, &stmt, NULL) != SQLITE_OK) {
-        err_print("C_PRIM", "sqlite_prim_table_exists", "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
         return -1;
     }
 
-    int exists = 0;
     if (sqlite3_step(stmt) == SQLITE_ROW) {
-        exists = sqlite3_column_int(stmt, 0);
+        exists = 1;
     }
 
     sqlite3_finalize(stmt);
     return exists;
+}
+
+int sqlite_prim_get_rowid_by_column_value(sqlite3 *db, const char *table, const char *column, const char *value) {
+    char query[512];
+    sqlite3_stmt *stmt;
+    int row_id = -1;
+
+    dbg_print("C_PRIM", "sqlite_prim_get_rowid_by_column_value", "Searching for %s='%s' in table %s\n", column, value, table);
+
+    // Build query to find row ID by column value
+    snprintf(query, sizeof(query), "SELECT rowid FROM %s WHERE %s = ?;", table, column);
+
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, NULL) != SQLITE_OK) {
+        err_print("C_PRIM", "sqlite_prim_get_rowid_by_column_value", "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return -1;
+    }
+
+    // Bind the value parameter
+    if (sqlite3_bind_text(stmt, 1, value, -1, SQLITE_STATIC) != SQLITE_OK) {
+        err_print("C_PRIM", "sqlite_prim_get_rowid_by_column_value", "Failed to bind value: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return -1;
+    }
+
+    // Execute query and get row ID
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        row_id = sqlite3_column_int(stmt, 0);
+        dbg_print("C_PRIM", "sqlite_prim_get_rowid_by_column_value", "Found row ID: %d\n", row_id);
+    } else {
+        dbg_print("C_PRIM", "sqlite_prim_get_rowid_by_column_value", "No matching row found\n");
+    }
+
+    sqlite3_finalize(stmt);
+    return row_id;
+}
+
+int sqlite_prim_get_row_by_rowid(sqlite3 *db, const char *table, int row_id, char ***values, int col_count) {
+    char query[256];
+    sqlite3_stmt *stmt;
+
+    dbg_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Getting row %d from table %s with %d columns\n", row_id, table, col_count);
+
+    // Build query to get row by ID
+    snprintf(query, sizeof(query), "SELECT * FROM %s WHERE rowid = ?;", table);
+
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, NULL) != SQLITE_OK) {
+        err_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return -1;
+    }
+
+    // Bind the row ID parameter
+    if (sqlite3_bind_int(stmt, 1, row_id) != SQLITE_OK) {
+        err_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Failed to bind row ID: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return -1;
+    }
+
+    // Execute query and get row data
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Check if actual column count matches expected column count
+        int actual_col_count = sqlite3_column_count(stmt);
+        if (actual_col_count < col_count) {
+            err_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Requested %d columns but only %d available\n", col_count, actual_col_count);
+            sqlite3_finalize(stmt);
+            return -1;
+        }
+
+        // Allocate memory for values array
+        *values = (char **)malloc(col_count * sizeof(char *));
+        if (*values == NULL) {
+            err_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Memory allocation failed\n");
+            sqlite3_finalize(stmt);
+            return -1;
+        }
+
+        // Retrieve column values
+        for (int i = 0; i < col_count; i++) {
+            const char *val = (const char *)sqlite3_column_text(stmt, i);
+            (*values)[i] = val ? strdup(val) : NULL;
+            dbg_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Column %d = %s\n", i, (*values)[i] ? (*values)[i] : "NULL");
+        }
+
+        sqlite3_finalize(stmt);
+        return 0;
+    }
+
+    err_print("C_PRIM", "sqlite_prim_get_row_by_rowid", "Row %d not found in table %s\n", row_id, table);
+    sqlite3_finalize(stmt);
+    return -1;
 }

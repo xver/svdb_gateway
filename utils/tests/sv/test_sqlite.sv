@@ -79,6 +79,14 @@ module test_sqlite (input reg clk_i);
       Test_name = "Index Operations test";
       Pass = index_operations_test(Test_name);
 
+      // Test row lookup operations (new functions)
+      Test_name = "Row Lookup Operations test";
+      Pass = row_lookup_operations_test(Test_name);
+
+      // Test get_row and get_all_rows operations
+      Test_name = "Get Row Operations test";
+      Pass = get_row_operations_test(Test_name);
+
       // Test closing SQLite database
       Test_name = "Close SQLite DB test";
       Pass = close_sqlite_test(Test_name);
@@ -637,19 +645,168 @@ module test_sqlite (input reg clk_i);
       return Pass;
    endfunction
 
+   // Function: row_lookup_operations_test
+   //
+   // Test for specific row lookup functions.
+   // Tests get_rowid_by_column_value and get_cell_value.
+   //
+   // Parameter: test_name - Name of the test for reporting
+   // Returns: 1 if test passes, 0 if test fails
+   function automatic bit row_lookup_operations_test(input string test_name);
+      bit success = 1'b1;
+      string table_name = "lookup_test";
+      string columns_def = "id INTEGER PRIMARY KEY, column_1 TEXT, column_2 TEXT";
+      int row_id;
+      string col1_val, col2_val;
+      int rc; // Variable to capture return codes
+      string query;
+      string value_to_find = "column_1_row_2";
+
+      $display("\n--- Starting Test: %s ---", test_name);
+
+      // Create table
+      if (sqlite_dpi_create_table(SqliteDB, table_name, columns_def) != 0) begin
+         $display("ERROR: Could not create table '%s'", table_name);
+         success = 1'b0;
+      end
+
+      // Insert data
+      if (success) begin
+         for (int i = 1; i <= 3; i++) begin
+            $sformat(query, "INSERT INTO %s (column_1, column_2) VALUES ('column_1_row_%0d', 'column_2_row_%0d');", table_name, i, i);
+            rc = sqlite_dpi_execute_query(SqliteDB, query);
+         end
+         $display("PASS: Inserted test data into '%s'", table_name);
+
+         // Print table contents
+         $display("\nTable contents for '%s':", table_name);
+         rc = sqlite_dpi_execute_query(SqliteDB, {"SELECT * FROM ", table_name});
+      end
+
+      // Test get_rowid_by_column_value
+      if (success) begin
+         row_id = sqlite_dpi_get_rowid_by_column_value(SqliteDB, table_name, "column_1", value_to_find);
+         if (row_id > 0) begin
+            $display("PASS: Found rowid %0d for column_1 '%s'", row_id, value_to_find);
+         end else begin
+            $display("ERROR: Did not find rowid for column_1 '%s'", value_to_find);
+            success = 1'b0;
+         end
+      end
+
+      // Test get_cell_value
+      if (success && row_id > 0) begin
+         col1_val = sqlite_dpi_get_cell_value(SqliteDB, table_name, row_id, "column_1");
+         col2_val = sqlite_dpi_get_cell_value(SqliteDB, table_name, row_id, "column_2");
+
+         $display("Retrieved data for rowid %0d: column_1='%s', column_2='%s'", row_id, col1_val, col2_val);
+
+         if (col1_val == value_to_find && col2_val == "column_2_row_2") begin
+            $display("PASS: Retrieved cell values match expected values.");
+         end else begin
+            $display("ERROR: Retrieved cell values do not match expected values.");
+            success = 1'b0;
+         end
+      end
+
+      // Cleanup: drop the table
+      if (sqlite_dpi_drop_table(SqliteDB, table_name) == 0) begin
+         $display("PASS: Cleaned up and dropped table '%s'", table_name);
+      end else begin
+         $display("ERROR: Could not drop table '%s'", table_name);
+         // Don't fail the overall test for a cleanup failure, but note it.
+      end
+
+      end_of_test(success, test_name);
+      return Pass;
+   endfunction
+
+   // Function: get_row_operations_test
+   //
+   // Test for get_row and get_all_rows functions.
+   // NOTE: This test only verifies successful execution (return code 0), as the
+   // current DPI implementation prints data to the console instead of returning it
+   // to SystemVerilog.
+   //
+   // Parameter: test_name - Name of the test for reporting
+   // Returns: 1 if test passes, 0 if test fails
+   function automatic bit get_row_operations_test(input string test_name);
+      bit success = 1'b1;
+      string table_name = "get_row_test_table";
+      string columns_def = "id INTEGER PRIMARY KEY, item TEXT";
+      int rc;
+      string query;
+      int row_id_to_get;
+
+      $display("\n--- Starting Test: %s ---", test_name);
+
+      // Create table
+      if (sqlite_dpi_create_table(SqliteDB, table_name, columns_def) != 0) begin
+         $display("ERROR: Could not create table '%s'", table_name);
+         success = 1'b0;
+      end
+
+      // Insert data and get the rowid of the second entry
+      if (success) begin
+         rc = sqlite_dpi_execute_query(SqliteDB, {"INSERT INTO ", table_name, " (item) VALUES ('item_A');"});
+         rc = sqlite_dpi_execute_query(SqliteDB, {"INSERT INTO ", table_name, " (item) VALUES ('item_B');"});
+         row_id_to_get = sqlite_dpi_get_rowid_by_column_value(SqliteDB, table_name, "item", "item_B");
+         rc = sqlite_dpi_execute_query(SqliteDB, {"INSERT INTO ", table_name, " (item) VALUES ('item_C');"});
+         $display("PASS: Inserted test data into '%s'", table_name);
+      end
+
+      // Test sqlite_dpi_get_row
+      if (success) begin
+         $display("\nTesting sqlite_dpi_get_row for rowid %0d...", row_id_to_get);
+         rc = sqlite_dpi_get_row(SqliteDB, table_name, row_id_to_get);
+         if (rc == 0) begin
+            $display("PASS: sqlite_dpi_get_row executed successfully.");
+         end else begin
+            $display("ERROR: sqlite_dpi_get_row failed with return code %0d.", rc);
+            success = 1'b0;
+         end
+      end
+
+      // Test sqlite_dpi_get_all_rows
+      if (success) begin
+         string      dummy_rows_not_used; // Dummy variables to satisfy Verilator
+         int         dummy_row_count, dummy_col_count;
+
+         $display("\nTesting sqlite_dpi_get_all_rows...");
+         // This function requires dummy output arguments that are not used in the current C implementation
+         // but are part of the function signature in the C primitive. The DPI wrapper handles this.
+         rc = sqlite_dpi_get_all_rows(SqliteDB, table_name, dummy_rows_not_used, dummy_row_count, dummy_col_count);
+         if (rc == 0) begin
+            $display("PASS: sqlite_dpi_get_all_rows executed successfully.");
+         end else begin
+            $display("ERROR: sqlite_dpi_get_all_rows failed with return code %0d.", rc);
+            success = 1'b0;
+         end
+      end
+
+      // Cleanup: drop the table
+      if (sqlite_dpi_drop_table(SqliteDB, table_name) == 0) begin
+         $display("PASS: Cleaned up and dropped table '%s'", table_name);
+      end else begin
+         $display("ERROR: Could not drop table '%s'", table_name);
+      end
+
+      end_of_test(success, test_name);
+      return Pass;
+   endfunction
+
    // Function: end_of_test
    //
-   // Helper function to handle test completion.
-   // Updates pass/fail counts and displays test results.
+   // Helper function to report the result of a test.
    //
-   // Parameter: success - Test result (1 for pass, 0 for fail)
-   // Parameter: test_name - Name of the completed test
+   // Parameter: success - Whether the test succeeded
+   // Parameter: test_name - Name of the test
    function automatic void end_of_test(input bit success, input string test_name);
       if (success) begin
-         $display("PASS: %s @%0t", test_name, $time);
+         $display("\n===== TEST PASS: %s =====\n", test_name);
          PassCount++;
       end else begin
-         $display("FAIL: %s @%0t", test_name, $time);
+         $display("\n===== TEST FAIL: %s =====\n", test_name);
          FailCount++;
          Pass = 1'b0;
       end

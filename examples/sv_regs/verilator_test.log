@@ -1,0 +1,53 @@
+Running simulation...
+Command: ./obj_dir/Vtest_registers
+
+[SVDB] Register Table Iteration Test: START
+Successfully opened SQLite database: ../example_registers.db
+
+[TEST 1] Checking if registers table exists...
+PASS: registers table exists
+===== TEST PASS: Table Existence =====
+
+[TEST 2] Retrieving all registers from registers table...
+All registers in the database:
+PASS: Successfully executed query for all registers
+===== TEST PASS: Retrieve All Registers =====
+
+[TEST 3] Retrieving specific registers by name using manual query...
+
+Looking for register: status_register
+PASS: Found status_register with row ID: 1
+
+Looking for register: control_register
+PASS: Found control_register with row ID: 2
+
+Looking for register: configuration_register
+PASS: Found configuration_register with row ID: 3
+
+Looking for register: security_register
+PASS: Found security_register with row ID: 4
+===== TEST PASS: Retrieve Specific by Query =====
+
+[TEST 4] Retrieving specific registers and printing cell values from SV...
+
+Looking for register: status_register
+PASS: Found status_register with row ID: 1
+  Name: status_register, AddressOffset: 0x0, Size: 32, Access: read-only, ResetValue: 
+
+Looking for register: control_register
+PASS: Found control_register with row ID: 2
+  Name: control_register, AddressOffset: 0x4, Size: 32, Access: write-only, ResetValue: 
+
+Looking for register: configuration_register
+PASS: Found configuration_register with row ID: 3
+  Name: configuration_register, AddressOffset: 0x8, Size: 32, Access: read-write, ResetValue: 
+
+Looking for register: security_register
+PASS: Found security_register with row ID: 4
+  Name: security_register, AddressOffset: 0xC, Size: 32, Access: read-writeOnce, ResetValue: 
+===== TEST PASS: Retrieve Specific by Cell =====
+
+[SVDB] Register Table Iteration Test: PASS
+Tests Passed: 4, Tests Failed: 0, Total: 4
+- test_registers.sv:71: Verilog $finish
+Simulation complete. Test log file generated: ./verilator_test.log

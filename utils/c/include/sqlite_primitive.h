@@ -128,6 +128,49 @@ int sqlite_prim_insert_row(sqlite3 *db, const char *table, const char **columns,
 */
 int sqlite_prim_delete_row(sqlite3 *db, const char *table, int row_id);
 
+/* Function: sqlite_prim_get_rowid_by_column_value
+   Retrieves the first row ID that matches a specific column value.
+
+   Parameters:
+      db - Pointer to the SQLite database connection
+      table - Name of the table
+      column - Name of the column to search in
+      value - Value to search for
+
+   Returns:
+      Row ID if found, -1 if not found or on error
+*/
+int sqlite_prim_get_rowid_by_column_value(sqlite3 *db, const char *table, const char *column, const char *value);
+
+/* Function: sqlite_prim_get_cell_value
+   Retrieves the value of a specific cell in a table.
+
+   Parameters:
+      db - Pointer to the SQLite database connection
+      table - Name of the table
+      row_id - ID of the row
+      column - Name of the column
+
+   Returns:
+      The value of the cell as a string, or NULL on error or if not found. The caller is responsible for freeing the returned string.
+*/
+const char* sqlite_prim_get_cell_value(sqlite3* db, const char* table, int row_id, const char* column);
+
+/* Function: sqlite_prim_get_row_by_rowid
+   Retrieves a row from a table by ID and returns it as an array.
+
+   Parameters:
+      db - Pointer to the SQLite database connection
+      table - Name of the table
+      row_id - ID of the row to retrieve
+      values - Pointer to store the row values
+      col_count - Number of columns to retrieve
+
+   Returns:
+      SQLite result code (SQLITE_OK on success)
+*/
+int sqlite_prim_get_row_by_rowid(sqlite3 *db, const char *table, int row_id, char ***values, int col_count);
+
 /************************************************
  * Section: Multi-Row Operations
  ************************************************/

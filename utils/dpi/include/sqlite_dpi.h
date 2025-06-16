@@ -163,6 +163,37 @@ int sqlite_dpi_delete_row(sqlite3 *db, const char *table_name, int row_id);
 */
 int sqlite_dpi_get_row(sqlite3 *db, const char *table_name, int row_id);
 
+/* Function: sqlite_dpi_get_rowid_by_column_value
+
+   Retrieves the first row ID that matches a specific column value.
+
+   Parameters:
+
+      db - Pointer to the SQLite database connection.
+      table_name - Name of the table.
+      column - Name of the column to search in.
+      value - Value to search for.
+
+   Returns:
+
+      Row ID if found, -1 if not found or on error.
+*/
+extern int sqlite_dpi_get_rowid_by_column_value(void* db, const char* table_name, const char* column, const char* value);
+
+/* Function: sqlite_dpi_get_cell_value
+   Retrieves the value of a specific cell from a table.
+
+   Parameters:
+      db - The database handle.
+      table_name - The name of the table.
+      row_id - The ID of the row.
+      column - The name of the column.
+
+   Returns:
+      The value of the cell as a string, or NULL on error.
+*/
+extern const char* sqlite_dpi_get_cell_value(void* db, const char* table_name, int row_id, const char* column);
+
 /* Function: sqlite_dpi_create_table
 
    Creates a new table in the database.
@@ -315,5 +346,9 @@ int sqlite_dpi_rollback_transaction(sqlite3 *db);
       SQLite result code (SQLITE_OK on success).
 */
 int sqlite_dpi_vacuum_database(sqlite3 *db);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SQLITE_DPI_H

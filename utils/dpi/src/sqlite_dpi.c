@@ -134,6 +134,14 @@ int sqlite_dpi_get_row(sqlite3 *db, const char *table_name, int row_id) {
     return result;
 }
 
+int sqlite_dpi_get_rowid_by_column_value(void *db, const char *table_name, const char *column, const char *value) {
+    if (!db) {
+        err_print("C_DPI", "sqlite_dpi_get_rowid_by_column_value", "Database handle is NULL\n");
+        return -1;
+    }
+    return sqlite_prim_get_rowid_by_column_value((sqlite3*)db, table_name, column, value);
+}
+
 int sqlite_dpi_create_table(sqlite3 *db, const char *table_name, const char *columns) {
     dbg_print("DPI", "sqlite_dpi_create_table", "Creating table '%s' with columns: %s", table_name, columns);
     return sqlite_prim_create_table(db, table_name, columns);
@@ -194,4 +202,12 @@ int sqlite_dpi_rollback_transaction(sqlite3 *db) {
 int sqlite_dpi_vacuum_database(sqlite3 *db) {
     dbg_print("DPI", "sqlite_dpi_vacuum_database", "Vacuuming database");
     return sqlite_prim_vacuum_database(db);
+}
+
+const char* sqlite_dpi_get_cell_value(void* db, const char* table_name, int row_id, const char* column) {
+    if (!db) {
+        err_print("C_DPI", "sqlite_dpi_get_cell_value", "Database handle is NULL\n");
+        return NULL;
+    }
+    return sqlite_prim_get_cell_value((sqlite3*)db, table_name, row_id, column);
 }
