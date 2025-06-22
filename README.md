@@ -89,7 +89,7 @@ svdb_gateway/
 
 ## Recent Updates
 
-### Latest Changes (v1.0.1)
+### Latest Changes (v0.0.2)
 - **Enhanced DPI Functions**: Added `sqlite_dpi_get_rowid_by_column_value()` and `sqlite_dpi_get_cell_value()`
 - **Register Examples**: New `examples/sv_regs/` with comprehensive register testing
 - **Improved Testing**: Enhanced test coverage with 11 passing test cases
