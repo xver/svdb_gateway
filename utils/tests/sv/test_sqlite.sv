@@ -67,9 +67,6 @@ module test_sqlite (input reg clk_i);
       Pass = vacuum_database_test(Test_name);
 
       // Test for the newly added functions
-      // Test multi-row operations
-      Test_name = "Multi-Row Operations test";
-      Pass = multi_row_operations_test(Test_name);
 
       // Test table create/drop operations
       Test_name = "Table Create/Drop test";
@@ -83,7 +80,7 @@ module test_sqlite (input reg clk_i);
       Test_name = "Row Lookup Operations test";
       Pass = row_lookup_operations_test(Test_name);
 
-      // Test get_row and get_all_rows operations
+      // Test get_row operations
       Test_name = "Get Row Operations test";
       Pass = get_row_operations_test(Test_name);
 
@@ -141,7 +138,7 @@ module test_sqlite (input reg clk_i);
       SqliteDB = sqlite_dpi_open_database(db_name);
 
       if (SqliteDB != null) begin
-         $display("PASS: Opened SQLite database '%s' with handle %0d", db_name, SqliteDB);
+         $display("PASS: Opened SQLite database '%s' with handle %p", db_name, SqliteDB);
       end else begin
          $display("ERROR: Could not open SQLite database '%s'", db_name);
          success = 1'b0;
@@ -165,7 +162,7 @@ module test_sqlite (input reg clk_i);
       if (SqliteDB != null) begin
          sqlite_dpi_close_database(SqliteDB);
          success = 1'b1;
-         $display("PASS: Closed SQLite database with handle %0d", SqliteDB);
+         $display("PASS: Closed SQLite database with handle %p", SqliteDB);
          SqliteDB = null;
       end else begin
          $display("ERROR: Cannot close SQLite database - handle is null");
@@ -419,96 +416,9 @@ module test_sqlite (input reg clk_i);
    function automatic bit multi_row_operations_test(input string test_name);
       bit success = 1'b1;
       string table_name = "test_table";
-      chandle rows;
-      int row_count;
-      int col_count;
-      string columns = "name, value";
-      string values1 = "'multi_row_test_1', 10";
-      string values2 = "'multi_row_test_2', 20";
-      string values3 = "'multi_row_test_3', 30";
-      int row_id;
-      int result;
 
-      // Print initial message
-      $display("Testing get_all_rows functionality on '%s'", table_name);
-
-      // Begin transaction
-      if (sqlite_dpi_begin_transaction(SqliteDB) != 0) begin
-         $display("ERROR: Could not begin transaction for multi-row test");
-         success = 1'b0;
-         return success;
-      end
-
-      // Add several test rows
-      // Insert first row
-      row_id = sqlite_dpi_insert_row(SqliteDB, table_name, columns, values1);
-      if (row_id <= 0) begin
-         $display("ERROR: Could not insert test row 1 for multi-row test");
-         success = 1'b0;
-         result = sqlite_dpi_rollback_transaction(SqliteDB);
-         return success;
-      end
-
-      // Insert second row
-      row_id = sqlite_dpi_insert_row(SqliteDB, table_name, columns, values2);
-      if (row_id <= 0) begin
-         $display("ERROR: Could not insert test row 2 for multi-row test");
-         success = 1'b0;
-         result = sqlite_dpi_rollback_transaction(SqliteDB);
-         return success;
-      end
-
-      // Insert third row
-      row_id = sqlite_dpi_insert_row(SqliteDB, table_name, columns, values3);
-      if (row_id <= 0) begin
-         $display("ERROR: Could not insert test row 3 for multi-row test");
-         success = 1'b0;
-         result = sqlite_dpi_rollback_transaction(SqliteDB);
-         return success;
-      end
-
-      // Commit transaction with test data
-      if (sqlite_dpi_commit_transaction(SqliteDB) != 0) begin
-         $display("ERROR: Could not commit transaction for multi-row test");
-         success = 1'b0;
-         return success;
-      end
-
-      // Show current table contents
-      $display("Table contents before get_all_rows test:");
-      if (sqlite_dpi_execute_query(SqliteDB, {"SELECT * FROM ", table_name}) != 0) begin
-         $display("ERROR: Could not retrieve table contents before get_all_rows test");
-         success = 1'b0;
-      end
-
-      // Fetch all rows using the new function
-      if (sqlite_dpi_get_all_rows(SqliteDB, table_name, rows, row_count, col_count) == 0) begin
-         $display("PASS: Successfully retrieved all rows from table '%s'", table_name);
-         $display("      Retrieved %0d rows with %0d columns each", row_count, col_count);
-         // In a real application, we would process the rows data here
-         // For the test, we just verify that the function worked
-      end else begin
-         $display("ERROR: Failed to get all rows from table '%s'", table_name);
-         success = 1'b0;
-      end
-
-      // Clean up the test data
-      if (sqlite_dpi_begin_transaction(SqliteDB) != 0) begin
-         $display("ERROR: Could not begin cleanup transaction");
-         success = 1'b0;
-         return success;
-      end
-
-      if (sqlite_dpi_execute_query(SqliteDB, {"DELETE FROM ", table_name, " WHERE name LIKE 'multi_row_test%'"}) != 0) begin
-         $display("WARNING: Could not clean up test data after multi-row test");
-         // Not failing the test for cleanup issues
-      end
-
-      result = sqlite_dpi_commit_transaction(SqliteDB);
-      if (result != 0) begin
-         $display("ERROR: Could not commit cleanup transaction");
-         // Not failing the test for cleanup issues
-      end
+      // This test is currently a placeholder for future multi-row operations
+      // that may be implemented using alternative approaches.
 
       end_of_test(success, test_name);
       return Pass;
@@ -723,7 +633,7 @@ module test_sqlite (input reg clk_i);
 
    // Function: get_row_operations_test
    //
-   // Test for get_row and get_all_rows functions.
+   // Test for get_row function.
    // NOTE: This test only verifies successful execution (return code 0), as the
    // current DPI implementation prints data to the console instead of returning it
    // to SystemVerilog.
@@ -763,23 +673,6 @@ module test_sqlite (input reg clk_i);
             $display("PASS: sqlite_dpi_get_row executed successfully.");
          end else begin
             $display("ERROR: sqlite_dpi_get_row failed with return code %0d.", rc);
-            success = 1'b0;
-         end
-      end
-
-      // Test sqlite_dpi_get_all_rows
-      if (success) begin
-         string      dummy_rows_not_used; // Dummy variables to satisfy Verilator
-         int         dummy_row_count, dummy_col_count;
-
-         $display("\nTesting sqlite_dpi_get_all_rows...");
-         // This function requires dummy output arguments that are not used in the current C implementation
-         // but are part of the function signature in the C primitive. The DPI wrapper handles this.
-         rc = sqlite_dpi_get_all_rows(SqliteDB, table_name, dummy_rows_not_used, dummy_row_count, dummy_col_count);
-         if (rc == 0) begin
-            $display("PASS: sqlite_dpi_get_all_rows executed successfully.");
-         end else begin
-            $display("ERROR: sqlite_dpi_get_all_rows failed with return code %0d.", rc);
             success = 1'b0;
          end
       end

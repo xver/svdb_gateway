@@ -226,28 +226,6 @@ int sqlite_dpi_create_table(sqlite3 *db, const char *table_name, const char *col
 int sqlite_dpi_drop_table(sqlite3 *db, const char *table_name);
 
 /************************************************
- * Section: Multi-Row Operations
- ************************************************/
-
-/* Function: sqlite_dpi_get_all_rows
-
-   Retrieves all rows from a table.
-
-   Parameters:
-
-      db - Pointer to the SQLite database connection.
-      table_name - Name of the table.
-      rows - Pointer to store the retrieved rows.
-      row_count - Pointer to store the number of rows.
-      col_count - Pointer to store the number of columns.
-
-   Returns:
-
-      SQLite result code (SQLITE_OK on success).
-*/
-int sqlite_dpi_get_all_rows(sqlite3 *db, const char *table_name, char ****rows, int *row_count, int *col_count);
-
-/************************************************
  * Section:  Index Management
  ************************************************/
 

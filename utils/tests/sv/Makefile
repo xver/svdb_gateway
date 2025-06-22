@@ -29,7 +29,7 @@ SVDB_DPI_PKG = ${SVDB_HOME}/utils/dpi/src/sqlite_dpi_pkg.sv
 CS_COMMON = cs_common.svh
 TEST_FILE = test_sqlite.sv
 
-# Define Verilator flags
+ # Define Verilator flags
 SVDB_VERILATOR_FLAG = -CFLAGS "-I${SVDB_HOME}/utils/dpi/include" \
                       -CFLAGS "-I${SVDB_HOME}/utils/c/include" \
                       -CFLAGS "$(CFLAGS)" \
@@ -37,27 +37,42 @@ SVDB_VERILATOR_FLAG = -CFLAGS "-I${SVDB_HOME}/utils/dpi/include" \
 
 MAKE_SVDB = ../../makedir
 
-ifeq (${VERILATOR},)
-export VERILATOR = verilator
-endif
+SIM ?= verilator
+# VCS variables
+VCS = vcs
+VCS_FLAGS = -full64 -sverilog -debug_access+all -timescale=1ns/1ps -l vcs_comp.log \
+    -CFLAGS "-I${SVDB_HOME}/utils/dpi/include -I${SVDB_HOME}/utils/c/include $(CFLAGS)" \
+    -LDFLAGS "${SVDB_HOME}/bin/libdbdpi.so"
+VCS_RUN_FLAGS = -l vcs_run.log
+VCS_EXE = simv
 
-.PHONY: all clean run svdb_compile compile_verilator_sv help debug
+.PHONY: all clean run svdb_compile compile_verilator_sv compile_vcs_sv run_verilator run_vcs help debug
 
 # Default target
 all:
 	@echo "Starting all target..."
 	$(MAKE) clean && \
 	$(MAKE) svdb_compile && \
-	$(MAKE) compile_verilator_sv && \
-	$(MAKE) run
+	if [ "$(SIM)" = "vcs" ]; then \
+	  $(MAKE) compile_vcs_sv && \
+	  $(MAKE) run_vcs; \
+	else \
+	  $(MAKE) compile_verilator_sv && \
+	  $(MAKE) run_verilator; \
+	fi
 
 # Debug target
 debug:
 	@echo "Starting debug target..."
 	$(MAKE) DEBUG=1 clean && \
 	$(MAKE) DEBUG=1 svdb_compile && \
-	$(MAKE) DEBUG=1 compile_verilator_sv && \
-	$(MAKE) DEBUG=1 run && \
+	if [ "$(SIMULATOR)" = "vcs" ]; then \
+	  $(MAKE) DEBUG=1 compile_vcs_sv && \
+	  $(MAKE) DEBUG=1 run_vcs; \
+	else \
+	  $(MAKE) DEBUG=1 compile_verilator_sv && \
+	  $(MAKE) DEBUG=1 run_verilator; \
+	fi && \
 	echo "Completed debug target."
 
 # Display help information
@@ -69,7 +84,9 @@ help:
 	@echo "  debug              : Same as all but with verbose debugging enabled"
 	@echo "  svdb_compile       : Compiles the SVDB C libraries"
 	@echo "  compile_verilator_sv: Compiles SystemVerilog code with Verilator"
-	@echo "  run                : Runs the simulation"
+	@echo "  compile_vcs_sv     : Compiles SystemVerilog code with VCS"
+	@echo "  run_verilator      : Runs the simulation with Verilator"
+	@echo "  run_vcs            : Runs the simulation with VCS"
 	@echo "  clean              : Removes all generated files and directories"
 	@echo "  help               : Displays this help message"
 
@@ -81,12 +98,14 @@ help:
 	@echo "  LIBDBDPI_PATH      : Path to libdbdpi.so library (default: \${SVDB_HOME}/bin/libdbdpi.so)"
 	@echo "  SVDB_HOME          : Path to svdb_gateway root directory (default: automatically detected)"
 	@echo "  DEBUG              : Set to 1 to enable verbose debugging (default: not set)"
+	@echo "  SIM                : Selects simulator (default: verilator, option: vcs)"
 	@echo ""
 	@echo "Example usage:"
 	@echo "  make               : Run all targets"
 	@echo "  make DEBUG=1       : Run all targets with verbose debugging enabled"
 	@echo "  make debug         : Run all targets with verbose debugging enabled"
 	@echo "  make OUTPUT_DIR=./output : Run all targets with custom output directory"
+	@echo "  make SIMULATOR=vcs : Run all targets with VCS"
 	@echo "  make help          : Show this help"
 
 # Clean target
@@ -122,9 +141,18 @@ compile_verilator_sv:
 	@cat $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE)
 	@echo "Completed compile_verilator_sv target."
 
-# Run target
-run:
-	@echo "Starting run target..."
+# Compile VCS target
+compile_vcs_sv:
+	@echo "Starting compile_vcs_sv target..."
+	@mkdir -p $(OUTPUT_DIR)
+	$(VCS) $(VCS_FLAGS) $(SVDB_DPI_PKG) $(CS_COMMON) $(TEST_FILE) -o $(OUTPUT_DIR)/$(VCS_EXE)
+	@echo "Compilation complete. Compilation log file generated: vcs_comp.log"
+	@cat vcs_comp.log
+	@echo "Completed compile_vcs_sv target."
+
+# Run Verilator target
+run_verilator:
+	@echo "Starting run_verilator target..."
 	@echo "Running simulation..." > $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@echo "Command: $(OUTPUT_DIR)/obj_dir/V$(TOP_MODULE)" >> $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@if [ -x "$(OUTPUT_DIR)/obj_dir/V$(TOP_MODULE)" ]; then \
@@ -136,5 +164,29 @@ run:
 	fi
 	@echo "Simulation complete. Test log file generated: $(OUTPUT_DIR)/$(TEST_LOG_FILE)" >> $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@cat $(OUTPUT_DIR)/$(TEST_LOG_FILE)
-	@echo "Completed run target."
+	@echo "Completed run_verilator target."
+
+# Run VCS target
+run_vcs:
+	@echo "Starting run_vcs target..."
+	@echo "Running simulation..." > $(OUTPUT_DIR)/vcs_run.log
+	@echo "Command: $(OUTPUT_DIR)/$(VCS_EXE)" >> $(OUTPUT_DIR)/vcs_run.log
+	@if [ -x "$(OUTPUT_DIR)/$(VCS_EXE)" ]; then \
+		$(OUTPUT_DIR)/$(VCS_EXE) $(VCS_RUN_FLAGS) >> $(OUTPUT_DIR)/vcs_run.log 2>&1 || { cat $(OUTPUT_DIR)/vcs_run.log; exit 1; }; \
+	else \
+		echo "Error: Executable $(OUTPUT_DIR)/$(VCS_EXE) not found or not executable" >> $(OUTPUT_DIR)/vcs_run.log; \
+		cat $(OUTPUT_DIR)/vcs_run.log; \
+		exit 1; \
+	fi
+	@echo "Simulation complete. VCS run log file generated: $(OUTPUT_DIR)/vcs_run.log" >> $(OUTPUT_DIR)/vcs_run.log
+	@cat $(OUTPUT_DIR)/vcs_run.log
+	@echo "Completed run_vcs target."
+
+# Update run target to select simulator
+run:
+	@if [ "$(SIMULATOR)" = "vcs" ]; then \
+	  $(MAKE) run_vcs; \
+	else \
+	  $(MAKE) run_verilator; \
+	fi
 

@@ -274,28 +274,6 @@ import "DPI-C" function int sqlite_dpi_drop_table(input chandle db, input string
 `endif
 
 /*
-Function: sqlite_dpi_get_all_rows
-Retrieves all rows from a table
-
-Parameters:
-
-   db - Database handle.
-   table_name - Name of the table.
-   rows - Output pointer to rows data.
-   row_count - Output pointer to row count.
-   col_count - Output pointer to column count.
-
-Returns:
-
-   0 on success, -1 on failure.
-
-Note: Can be disabled with `define NO_SQLITE_DPI_GET_ALL_ROWS
-*/
-`ifndef NO_SQLITE_DPI_GET_ALL_ROWS
-import "DPI-C" function int sqlite_dpi_get_all_rows(input chandle db, input string table_name, output string rows[][], output int row_count, output int col_count);
-`endif
-
-/*
 Function: sqlite_dpi_create_index
 Creates an index on a table column
 

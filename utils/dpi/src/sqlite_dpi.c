@@ -153,15 +153,6 @@ int sqlite_dpi_drop_table(sqlite3 *db, const char *table_name) {
 }
 
 /************************************************
- * Multi-Row Operations
- ************************************************/
-
-int sqlite_dpi_get_all_rows(sqlite3 *db, const char *table_name, char ****rows, int *row_count, int *col_count) {
-    dbg_print("DPI", "sqlite_dpi_get_all_rows", "Getting all rows from table '%s'", table_name);
-    return sqlite_prim_get_all_rows(db, table_name, rows, row_count, col_count);
-}
-
-/************************************************
  * Index Management
  ************************************************/
 

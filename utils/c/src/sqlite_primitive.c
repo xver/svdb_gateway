@@ -266,44 +266,6 @@ int sqlite_prim_delete_row(sqlite3 *db, const char *table, int row_id) {
 }
 
 /************************************************
- * Multi-Row Operations
- ************************************************/
-
-int sqlite_prim_get_all_rows(sqlite3 *db, const char *table, char ****rows, int *row_count, int *col_count) {
-    char query[256];
-    sqlite3_stmt *stmt;
-
-    snprintf(query, sizeof(query), "SELECT * FROM %s", table);
-
-    if (sqlite3_prepare_v2(db, query, -1, &stmt, NULL) != SQLITE_OK) {
-        err_print("C_PRIM", "sqlite_prim_get_all_rows", "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
-        return -1;
-    }
-
-    *row_count = 0;
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        (*row_count)++;
-    }
-    sqlite3_reset(stmt);
-
-    *col_count = sqlite3_column_count(stmt);
-    *rows = malloc(*row_count * sizeof(char **));
-
-    int row = 0;
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        (*rows)[row] = malloc(*col_count * sizeof(char *));
-        for (int col = 0; col < *col_count; col++) {
-            const char *val = (const char *)sqlite3_column_text(stmt, col);
-            (*rows)[row][col] = val ? strdup(val) : NULL;
-        }
-        row++;
-    }
-
-    sqlite3_finalize(stmt);
-    return 0;
-}
-
-/************************************************
  * Table Operations
  ************************************************/
 

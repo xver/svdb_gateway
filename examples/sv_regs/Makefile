@@ -30,8 +30,28 @@ SVDB_VERILATOR_FLAG = -CFLAGS "-I$(SVDB_HOME)/utils/dpi/include" \
                       -CFLAGS "$(CFLAGS)" \
                       -LDFLAGS "$(SVDB_HOME)/bin/libdbdpi.so"
 
+# VCS variables
+VCS = vcs
+VCS_FLAGS = -full64 -sverilog -debug_access+all -timescale=1ns/1ps -l vcs_comp.log \
+    -CFLAGS "-I$(SVDB_HOME)/utils/dpi/include -I$(SVDB_HOME)/utils/c/include $(CFLAGS)" \
+    -LDFLAGS "$(SVDB_HOME)/bin/libdbdpi.so"
+VCS_RUN_FLAGS = -l vcs_run.log
+VCS_EXE = simv
+
+SIM ?= verilator
+
 # Build targets
-all: clean create_db svdb_compile compile_verilator_sv run
+.PHONY: all compile_verilator_sv compile_vcs_sv run run_verilator run_vcs clean create_db svdb_compile
+
+# Default target
+all: clean create_db svdb_compile
+	@if [ "$(SIM)" = "vcs" ]; then \
+	  $(MAKE) compile_vcs_sv && \
+	  $(MAKE) run_vcs; \
+	else \
+	  $(MAKE) compile_verilator_sv && \
+	  $(MAKE) run_verilator; \
+	fi
 
 # Create database from XML
 create_db:
@@ -64,8 +84,18 @@ compile_verilator_sv:
 	@cat $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE)
 	@echo "Completed compile_verilator_sv target."
 
-run:
-	@echo "Starting run target..."
+# Compile VCS target
+compile_vcs_sv:
+	@echo "Starting compile_vcs_sv target..."
+	@mkdir -p $(OUTPUT_DIR)
+	$(VCS) $(VCS_FLAGS) $(SVDB_DPI_PKG) $(SV_SOURCES) -o $(OUTPUT_DIR)/$(VCS_EXE)
+	@echo "Compilation complete. Compilation log file generated: vcs_comp.log"
+	@cat vcs_comp.log
+	@echo "Completed compile_vcs_sv target."
+
+# Run Verilator target
+run_verilator:
+	@echo "Starting run_verilator target..."
 	@echo "Running simulation..." > $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@echo "Command: $(OUTPUT_DIR)/obj_dir/V$(TOP_MODULE)" >> $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@if [ -x "$(OUTPUT_DIR)/obj_dir/V$(TOP_MODULE)" ]; then \
@@ -77,11 +107,41 @@ run:
 	fi
 	@echo "Simulation complete. Test log file generated: $(OUTPUT_DIR)/$(TEST_LOG_FILE)" >> $(OUTPUT_DIR)/$(TEST_LOG_FILE)
 	@cat $(OUTPUT_DIR)/$(TEST_LOG_FILE)
-	@echo "Completed run target."
+	@echo "Completed run_verilator target."
+
+# Run VCS target
+run_vcs:
+	@echo "Starting run_vcs target..."
+	@echo "Running simulation..." > $(OUTPUT_DIR)/vcs_run.log
+	@echo "Command: $(OUTPUT_DIR)/$(VCS_EXE)" >> $(OUTPUT_DIR)/vcs_run.log
+	@if [ -x "$(OUTPUT_DIR)/$(VCS_EXE)" ]; then \
+		$(OUTPUT_DIR)/$(VCS_EXE) $(VCS_RUN_FLAGS) >> $(OUTPUT_DIR)/vcs_run.log 2>&1 || { cat $(OUTPUT_DIR)/vcs_run.log; exit 1; }; \
+	else \
+		echo "Error: Executable $(OUTPUT_DIR)/$(VCS_EXE) not found or not executable" >> $(OUTPUT_DIR)/vcs_run.log; \
+		cat $(OUTPUT_DIR)/vcs_run.log; \
+		exit 1; \
+	fi
+	@echo "Simulation complete. VCS run log file generated: $(OUTPUT_DIR)/vcs_run.log" >> $(OUTPUT_DIR)/vcs_run.log
+	@cat $(OUTPUT_DIR)/vcs_run.log
+	@echo "Completed run_vcs target."
+
+# Update run target to select simulator
+run:
+	@if [ "$(SIM)" = "vcs" ]; then \
+	  $(MAKE) run_vcs; \
+	else \
+	  $(MAKE) run_verilator; \
+	fi
 
 clean:
 	rm -rf obj_dir
 	rm -f *.log *.vcd
 	rm -f $(DB_FILE)
-
-.PHONY: all compile_verilator_sv run clean create_db svdb_compile
+	# VCS artifacts
+	rm -f simv
+	rm -rf csrc
+	rm -rf simv.daidir
+	rm -f vc_hdrs.h
+	rm -f ucli.key
+	rm -f vcs_comp.log
+	rm -f vcs_run.log

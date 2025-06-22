@@ -172,25 +172,6 @@ const char* sqlite_prim_get_cell_value(sqlite3* db, const char* table, int row_i
 int sqlite_prim_get_row_by_rowid(sqlite3 *db, const char *table, int row_id, char ***values, int col_count);
 
 /************************************************
- * Section: Multi-Row Operations
- ************************************************/
-
-/* Function: sqlite_prim_get_all_rows
-   Retrieves all rows from a table.
-
-   Parameters:
-      db - Pointer to the SQLite database connection
-      table - Name of the table
-      rows - Pointer to store the retrieved rows
-      row_count - Pointer to store number of rows
-      col_count - Pointer to store number of columns
-
-   Returns:
-      SQLite result code (SQLITE_OK on success)
-*/
-int sqlite_prim_get_all_rows(sqlite3 *db, const char *table, char ****rows, int *row_count, int *col_count);
-
-/************************************************
  * Section: Table Operations
  ************************************************/
 

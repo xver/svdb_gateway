@@ -1,7 +1,7 @@
 Compiling with Verilator...
 - V e r i l a t i o n   R e p o r t: Verilator 5.036 2025-04-27 rev v5.036-48-g0dc93c1d5
-- Verilator: Built from 0.137 MB sources in 3 modules, into 0.152 MB in 14 C++ files needing 0.001 MB
-- Verilator: Walltime 0.020 s (elab=0.002, cvt=0.008, bld=0.000); cpu 0.017 s on 1 threads; alloced 10.609 MB
+- Verilator: Built from 0.130 MB sources in 3 modules, into 0.131 MB in 14 C++ files needing 0.001 MB
+- Verilator: Walltime 0.051 s (elab=0.003, cvt=0.018, bld=0.000); cpu 0.039 s on 1 threads; alloced 10.230 MB
 Command: make -C ./obj_dir -j -f Vtest_sqlite.mk Vtest_sqlite
 make[2]: Entering directory '/home/v/proj/svdb_gateway/utils/tests/sv/obj_dir'
 g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -I/home/v/proj/svdb_gateway/utils/dpi/include -I/home/v/proj/svdb_gateway/utils/c/include -fPIC -shared -I/home/v/proj/svdb_gateway/utils/c/include -I/home/v/proj/svdb_gateway/utils/dpi/include -I/usr/include   -Os  -c -o sim_main.o ../sim_main.cpp

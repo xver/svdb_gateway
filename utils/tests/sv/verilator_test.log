@@ -6,7 +6,7 @@ PASS: Closed SQLite database 'test.db' after basic test
 
 ===== TEST PASS: Basic_sqlite_test =====
 
-PASS: Opened SQLite database 'test.db' with handle 109571198705464
+PASS: Opened SQLite database 'test.db' with handle      109827417395000
 
 ===== TEST PASS: Open SQLite DB test =====
 
@@ -27,21 +27,21 @@ Table Details:
 
 Initial table contents:
 PASS: Retrieved initial table contents
-PASS: Inserted row with ID 55 into table 'test_table'
+PASS: Inserted row with ID 61 into table 'test_table'
   Columns: name, value
   Values: 'test_name', 42
 
 Table contents after insert:
 PASS: Retrieved table contents after insert
-PASS: Retrieved row 55 from table 'test_table'
-PASS: Deleted row 55 from table 'test_table'
+PASS: Retrieved row 61 from table 'test_table'
+PASS: Deleted row 61 from table 'test_table'
 PASS: Successfully committed transaction
 
 ===== TEST PASS: Table Row Operations test =====
 
 Initial table contents before rollback test:
 PASS: Retrieved initial table contents
-PASS: Inserted temporary row with ID 55 into table 'test_table'
+PASS: Inserted temporary row with ID 61 into table 'test_table'
 
 Table contents after insert but before rollback:
 PASS: Retrieved table contents after insert
@@ -58,13 +58,6 @@ Verifying database is still accessible after vacuum:
 PASS: Database integrity check passed after vacuum
 
 ===== TEST PASS: Database Vacuum test =====
-
-Testing get_all_rows functionality on 'test_table'
-Table contents before get_all_rows test:
-PASS: Successfully retrieved all rows from table 'test_table'
-      Retrieved 57 rows with 3 columns each
-
-===== TEST PASS: Multi-Row Operations test =====
 
 Testing explicit table creation for 'test_create_drop_table'
 PASS: Created table 'test_create_drop_table' with columns: id INTEGER PRIMARY KEY, name TEXT, value INTEGER
@@ -108,18 +101,15 @@ PASS: Inserted test data into 'get_row_test_table'
 
 Testing sqlite_dpi_get_row for rowid 2...
 PASS: sqlite_dpi_get_row executed successfully.
-
-Testing sqlite_dpi_get_all_rows...
-PASS: sqlite_dpi_get_all_rows executed successfully.
 PASS: Cleaned up and dropped table 'get_row_test_table'
 
 ===== TEST PASS: Get Row Operations test =====
 
-PASS: Closed SQLite database with handle 109571198705464
+PASS: Closed SQLite database with handle      109827417395000
 
 ===== TEST PASS: Close SQLite DB test =====
 
 OVERALL TEST RESULT: PASS @0
-Tests Passed: 12, Tests Failed: 0, Total: 12
-- test_sqlite.sv:102: Verilog $finish
+Tests Passed: 11, Tests Failed: 0, Total: 11
+- test_sqlite.sv:99: Verilog $finish
 Simulation complete. Test log file generated: ./verilator_test.log

@@ -20,17 +20,41 @@
                 <!-- Read-Only Register -->
                 <ipxact:register>
                     <ipxact:name>status_register</ipxact:name>
-                    <ipxact:addressOffset>0x0</ipxact:addressOffset>
+                    <ipxact:addressOffset>0x100</ipxact:addressOffset>
                     <ipxact:size>32</ipxact:size>
                     <ipxact:access>read-only</ipxact:access>
                     <ipxact:description>Status register containing system state information</ipxact:description>
                     <ipxact:fields>
                         <ipxact:field>
                             <ipxact:name>system_ready</ipxact:name>
+                            <ipxact:displayName>System Ready Status</ipxact:displayName>
+                            <ipxact:description>Indicates whether the system is ready for operation. 1 = Ready, 0 = Not Ready</ipxact:description>
                             <ipxact:bitOffset>0</ipxact:bitOffset>
                             <ipxact:bitWidth>1</ipxact:bitWidth>
                             <ipxact:access>read-only</ipxact:access>
-                            <ipxact:description>Indicates if the system is ready</ipxact:description>
+                            <ipxact:volatile>false</ipxact:volatile>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>1</ipxact:value>
+                                    <ipxact:mask>1</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
+                        </ipxact:field>
+                        <ipxact:field>
+                            <ipxact:name>reserved_0</ipxact:name>
+                            <ipxact:displayName>Reserved</ipxact:displayName>
+                            <ipxact:description>Reserved for future use. Must be written as 0 and read as 0</ipxact:description>
+                            <ipxact:bitOffset>1</ipxact:bitOffset>
+                            <ipxact:bitWidth>31</ipxact:bitWidth>
+                            <ipxact:access>read-only</ipxact:access>
+                            <ipxact:volatile>false</ipxact:volatile>
+                            <ipxact:reserved>true</ipxact:reserved>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>0</ipxact:value>
+                                    <ipxact:mask>0x7FFFFFFF</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
                         </ipxact:field>
                     </ipxact:fields>
                 </ipxact:register>
@@ -38,17 +62,41 @@
                 <!-- Write-Only Register -->
                 <ipxact:register>
                     <ipxact:name>control_register</ipxact:name>
-                    <ipxact:addressOffset>0x4</ipxact:addressOffset>
+                    <ipxact:addressOffset>0x200</ipxact:addressOffset>
                     <ipxact:size>32</ipxact:size>
                     <ipxact:access>write-only</ipxact:access>
                     <ipxact:description>Control register for system configuration</ipxact:description>
                     <ipxact:fields>
                         <ipxact:field>
                             <ipxact:name>reset_system</ipxact:name>
+                            <ipxact:displayName>System Reset Control</ipxact:displayName>
+                            <ipxact:description>Controls system reset. Writing 1 triggers a system reset, writing 0 has no effect</ipxact:description>
                             <ipxact:bitOffset>0</ipxact:bitOffset>
                             <ipxact:bitWidth>1</ipxact:bitWidth>
                             <ipxact:access>write-only</ipxact:access>
-                            <ipxact:description>Writing 1 resets the system</ipxact:description>
+                            <ipxact:volatile>true</ipxact:volatile>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>0</ipxact:value>
+                                    <ipxact:mask>1</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
+                        </ipxact:field>
+                        <ipxact:field>
+                            <ipxact:name>reserved_0</ipxact:name>
+                            <ipxact:displayName>Reserved</ipxact:displayName>
+                            <ipxact:description>Reserved for future use. Must be written as 0 and read as 0</ipxact:description>
+                            <ipxact:bitOffset>1</ipxact:bitOffset>
+                            <ipxact:bitWidth>31</ipxact:bitWidth>
+                            <ipxact:access>write-only</ipxact:access>
+                            <ipxact:volatile>false</ipxact:volatile>
+                            <ipxact:reserved>true</ipxact:reserved>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>0</ipxact:value>
+                                    <ipxact:mask>0x7FFFFFFF</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
                         </ipxact:field>
                     </ipxact:fields>
                 </ipxact:register>
@@ -56,31 +104,61 @@
                 <!-- Read-Write Register -->
                 <ipxact:register>
                     <ipxact:name>configuration_register</ipxact:name>
-                    <ipxact:addressOffset>0x8</ipxact:addressOffset>
+                    <ipxact:addressOffset>0x300</ipxact:addressOffset>
                     <ipxact:size>32</ipxact:size>
                     <ipxact:access>read-write</ipxact:access>
                     <ipxact:description>Configuration register for system settings</ipxact:description>
                     <ipxact:fields>
                         <ipxact:field>
                             <ipxact:name>operation_mode</ipxact:name>
+                            <ipxact:displayName>Operation Mode Control</ipxact:displayName>
+                            <ipxact:description>Controls the operation mode of the system. See enumerated values for details</ipxact:description>
                             <ipxact:bitOffset>0</ipxact:bitOffset>
                             <ipxact:bitWidth>2</ipxact:bitWidth>
                             <ipxact:access>read-write</ipxact:access>
-                            <ipxact:description>Operation mode selection</ipxact:description>
+                            <ipxact:volatile>false</ipxact:volatile>
                             <ipxact:enumeratedValues>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>mode_normal</ipxact:name>
+                                    <ipxact:displayName>Normal Mode</ipxact:displayName>
+                                    <ipxact:description>Standard operation mode with balanced performance and power</ipxact:description>
                                     <ipxact:value>0</ipxact:value>
                                 </ipxact:enumeratedValue>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>mode_power_save</ipxact:name>
+                                    <ipxact:displayName>Power Save Mode</ipxact:displayName>
+                                    <ipxact:description>Reduced power consumption mode with lower performance</ipxact:description>
                                     <ipxact:value>1</ipxact:value>
                                 </ipxact:enumeratedValue>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>mode_high_performance</ipxact:name>
+                                    <ipxact:displayName>High Performance Mode</ipxact:displayName>
+                                    <ipxact:description>Maximum performance mode with higher power consumption</ipxact:description>
                                     <ipxact:value>2</ipxact:value>
                                 </ipxact:enumeratedValue>
                             </ipxact:enumeratedValues>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>2</ipxact:value>
+                                    <ipxact:mask>3</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
+                        </ipxact:field>
+                        <ipxact:field>
+                            <ipxact:name>reserved_0</ipxact:name>
+                            <ipxact:displayName>Reserved</ipxact:displayName>
+                            <ipxact:description>Reserved for future use. Must be written as 0 and read as 0</ipxact:description>
+                            <ipxact:bitOffset>2</ipxact:bitOffset>
+                            <ipxact:bitWidth>30</ipxact:bitWidth>
+                            <ipxact:access>read-write</ipxact:access>
+                            <ipxact:volatile>false</ipxact:volatile>
+                            <ipxact:reserved>true</ipxact:reserved>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>0</ipxact:value>
+                                    <ipxact:mask>0x3FFFFFFF</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
                         </ipxact:field>
                     </ipxact:fields>
                 </ipxact:register>
@@ -88,31 +166,61 @@
                 <!-- Read-WriteOnce Register -->
                 <ipxact:register>
                     <ipxact:name>security_register</ipxact:name>
-                    <ipxact:addressOffset>0xC</ipxact:addressOffset>
+                    <ipxact:addressOffset>0x400</ipxact:addressOffset>
                     <ipxact:size>32</ipxact:size>
                     <ipxact:access>read-writeOnce</ipxact:access>
                     <ipxact:description>Security configuration register that can only be written once</ipxact:description>
                     <ipxact:fields>
                         <ipxact:field>
                             <ipxact:name>security_level</ipxact:name>
+                            <ipxact:displayName>Security Level Control</ipxact:displayName>
+                            <ipxact:description>Controls the security level of the system. Can only be written once after reset</ipxact:description>
                             <ipxact:bitOffset>0</ipxact:bitOffset>
                             <ipxact:bitWidth>2</ipxact:bitWidth>
                             <ipxact:access>read-writeOnce</ipxact:access>
-                            <ipxact:description>Security level configuration</ipxact:description>
+                            <ipxact:volatile>false</ipxact:volatile>
                             <ipxact:enumeratedValues>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>level_low</ipxact:name>
+                                    <ipxact:displayName>Low Security</ipxact:displayName>
+                                    <ipxact:description>Basic security features enabled</ipxact:description>
                                     <ipxact:value>0</ipxact:value>
                                 </ipxact:enumeratedValue>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>level_medium</ipxact:name>
+                                    <ipxact:displayName>Medium Security</ipxact:displayName>
+                                    <ipxact:description>Enhanced security features enabled</ipxact:description>
                                     <ipxact:value>1</ipxact:value>
                                 </ipxact:enumeratedValue>
                                 <ipxact:enumeratedValue>
                                     <ipxact:name>level_high</ipxact:name>
+                                    <ipxact:displayName>High Security</ipxact:displayName>
+                                    <ipxact:description>Maximum security features enabled</ipxact:description>
                                     <ipxact:value>2</ipxact:value>
                                 </ipxact:enumeratedValue>
                             </ipxact:enumeratedValues>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>3</ipxact:value>
+                                    <ipxact:mask>3</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
+                        </ipxact:field>
+                        <ipxact:field>
+                            <ipxact:name>reserved_0</ipxact:name>
+                            <ipxact:displayName>Reserved</ipxact:displayName>
+                            <ipxact:description>Reserved for future use. Must be written as 0 and read as 0</ipxact:description>
+                            <ipxact:bitOffset>2</ipxact:bitOffset>
+                            <ipxact:bitWidth>30</ipxact:bitWidth>
+                            <ipxact:access>read-writeOnce</ipxact:access>
+                            <ipxact:volatile>false</ipxact:volatile>
+                            <ipxact:reserved>true</ipxact:reserved>
+                            <ipxact:resets>
+                                <ipxact:reset>
+                                    <ipxact:value>0</ipxact:value>
+                                    <ipxact:mask>0x3FFFFFFF</ipxact:mask>
+                                </ipxact:reset>
+                            </ipxact:resets>
                         </ipxact:field>
                     </ipxact:fields>
                 </ipxact:register>
