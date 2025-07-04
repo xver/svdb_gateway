@@ -23,7 +23,7 @@ module test_registers (input reg clk_i);
    chandle SqliteDB;
    int PassCount;
    int FailCount;
-   string specific_registers[4];
+   string specific_registers[6];
 
    initial begin
       string db_path = "../example_registers.db";
@@ -39,6 +39,9 @@ module test_registers (input reg clk_i);
       specific_registers[1] = "control_register";
       specific_registers[2] = "configuration_register";
       specific_registers[3] = "security_register";
+      specific_registers[4] = "status_flags";
+      specific_registers[5] = "control_bits";
+
 
       $display("\n[SVDB] Register Table Iteration Test: START");
       SqliteDB = sqlite_dpi_open_database(db_path);
@@ -61,6 +64,9 @@ module test_registers (input reg clk_i);
 
          current_test_success = test_retrieve_specific_by_cell();
          end_of_test(current_test_success, "Retrieve Specific by Cell");
+
+         current_test_success = test_print_hdlpath_for_registers();
+         end_of_test(current_test_success, "Print hdlPath for Registers");
 
          // --- Cleanup ---
          sqlite_dpi_close_database(SqliteDB);
@@ -175,6 +181,31 @@ module test_registers (input reg clk_i);
             end
          end else begin
             $display("ERROR: Register %s not found in database", specific_registers[i]);
+            success = 1'b0;
+         end
+      end
+      return success;
+   endfunction
+
+   // Function: test_print_hdlpath_for_registers
+   //
+   // Test 5: For each register in specific_registers, extract and print the vendor-defined hdlPath from vendorExtensions table.
+   function automatic bit test_print_hdlpath_for_registers();
+      bit success = 1'b1;
+      string reg_name;
+      string hdlpath_key;
+      string query;
+      int rc;
+
+      $display("\n[TEST 5] Extracting and printing vendor-defined hdlPath for each register in specific_registers...");
+      foreach (specific_registers[i]) begin
+         reg_name = specific_registers[i];
+         hdlpath_key = {"register:", reg_name, ":hdlPath"};
+         $sformat(query, "SELECT value FROM vendorExtensions WHERE key = '%s'", hdlpath_key);
+         $display("Querying hdlPath for register: %s", reg_name);
+         rc = sqlite_dpi_execute_query(SqliteDB, query);
+         if (rc != 0) begin
+            $display("  ERROR: Failed to retrieve hdlPath for %s", reg_name);
             success = 1'b0;
          end
       end

@@ -26,28 +26,51 @@ PASS: Found configuration_register with row ID: 3
 
 Looking for register: security_register
 PASS: Found security_register with row ID: 4
+
+Looking for register: status_flags
+PASS: Found status_flags with row ID: 5
+
+Looking for register: control_bits
+PASS: Found control_bits with row ID: 6
 ===== TEST PASS: Retrieve Specific by Query =====
 
 [TEST 4] Retrieving specific registers and printing cell values from SV...
 
 Looking for register: status_register
 PASS: Found status_register with row ID: 1
-  Name: status_register, AddressOffset: 0x100, Size: 32, Access: read-only, ResetValue: 1
+  Name: status_register, AddressOffset: 'h0, Size: 32, Access: read-only, ResetValue: 1'h0
 
 Looking for register: control_register
 PASS: Found control_register with row ID: 2
-  Name: control_register, AddressOffset: 0x200, Size: 32, Access: write-only, ResetValue: 0
+  Name: control_register, AddressOffset: 'h4, Size: 32, Access: write-only, ResetValue: 1'h1
 
 Looking for register: configuration_register
 PASS: Found configuration_register with row ID: 3
-  Name: configuration_register, AddressOffset: 0x300, Size: 32, Access: read-write, ResetValue: 2
+  Name: configuration_register, AddressOffset: 'h8, Size: 32, Access: read-write, ResetValue: 2'h2
 
 Looking for register: security_register
 PASS: Found security_register with row ID: 4
-  Name: security_register, AddressOffset: 0x400, Size: 32, Access: read-writeOnce, ResetValue: 3
+  Name: security_register, AddressOffset: 'hC, Size: 32, Access: read-writeOnce, ResetValue: 2'h3
+
+Looking for register: status_flags
+PASS: Found status_flags with row ID: 5
+  Name: status_flags, AddressOffset: 'h10, Size: 8, Access: read-only, ResetValue: 8'hA
+
+Looking for register: control_bits
+PASS: Found control_bits with row ID: 6
+  Name: control_bits, AddressOffset: 'h14, Size: 4, Access: read-write, ResetValue: 4'h7
 ===== TEST PASS: Retrieve Specific by Cell =====
 
+[TEST 5] Extracting and printing vendor-defined hdlPath for each register in specific_registers...
+Querying hdlPath for register: status_register
+Querying hdlPath for register: control_register
+Querying hdlPath for register: configuration_register
+Querying hdlPath for register: security_register
+Querying hdlPath for register: status_flags
+Querying hdlPath for register: control_bits
+===== TEST PASS: Print hdlPath for Registers =====
+
 [SVDB] Register Table Iteration Test: PASS
-Tests Passed: 4, Tests Failed: 0, Total: 4
-- test_registers.sv:71: Verilog $finish
+Tests Passed: 5, Tests Failed: 0, Total: 5
+- test_registers.sv:77: Verilog $finish
 Simulation complete. Test log file generated: ./verilator_test.log

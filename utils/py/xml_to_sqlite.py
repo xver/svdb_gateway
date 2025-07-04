@@ -458,6 +458,39 @@ class XMLToSQLite:
 
             reg_id = self.cursor.lastrowid
             logger.debug(f"Inserted register with ID: {reg_id}")
+            # Process vendor extensions for this register
+            vendor_extensions = reg.find('.//{*}vendorExtensions')
+            if vendor_extensions is not None:
+                for extension in vendor_extensions:
+                    if not isinstance(extension, ET.Element):
+                        continue
+                    vendor_id = 'unknown'
+                    if '}' in extension.tag:
+                        try:
+                            vendor_id = extension.tag.split('}')[0].strip('{')
+                        except Exception:
+                            logger.warning(f"Could not extract vendor ID from tag: {extension.tag}")
+                    tag_name = extension.tag.split('}')[-1] if '}' in extension.tag else extension.tag
+                    # Key encodes register name for round-trip
+                    key = f"register:{name}:{tag_name}"
+                    try:
+                        if extension.text and not list(extension):
+                            value = extension.text
+                        else:
+                            value = ET.tostring(extension, encoding='unicode')
+                    except Exception as e:
+                        logger.warning(f"Error processing vendor extension: {e}")
+                        value = ''
+                    # Use the metadata_id from the parent component
+                    # Find metadata_id by traversing up the parent chain
+                    # (address_block -> memory_map -> component)
+                    # But here, pass it as an argument or store it in self if needed
+                    # For now, assume self.current_metadata_id is set during processing
+                    self.cursor.execute('''
+                        INSERT INTO vendorExtensions (
+                            metadata_id, vendorId, key, value
+                        ) VALUES (?, ?, ?, ?)
+                    ''', (self.current_metadata_id, vendor_id, key, value))
 
             # Process fields
             self.insert_fields(reg, reg_id)
@@ -902,7 +935,10 @@ class XMLToSQLite:
                     self.store_original_xml(metadata_id, xml_file)
 
                     # Process memory maps
+                    # Set current_metadata_id for use in register/addressBlock vendorExtensions
+                    self.current_metadata_id = metadata_id
                     self.insert_memory_maps(component_root, metadata_id)
+                    del self.current_metadata_id
 
                     # Process bus interfaces
                     self.insert_bus_interfaces(component_root, metadata_id)
