@@ -10,7 +10,6 @@
  * Description: SystemVerilog package for SQLite DPI interface
  */
 
-`timescale 1ns/1ps
 
 package sqlite_dpi_pkg;
 

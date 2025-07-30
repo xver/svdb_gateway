@@ -56,6 +56,8 @@ all: clean create_db svdb_compile
 # Create database from XML
 create_db:
 	@echo "Creating database from XML file..."
+	@echo $(SVDB_HOME)
+	@echo $(PY_UTILS_DIR)
 	@cd $(PY_UTILS_DIR) && $(PYTHON) xml_to_sqlite.py $(XML_FILE) -o $(DB_FILE) -d
 	@echo "Database created successfully at $(DB_FILE)"
 
@@ -70,8 +72,10 @@ svdb_compile:
 compile_verilator_sv:
 	@echo "Starting compile_verilator_sv target..."
 	@mkdir -p $(OUTPUT_DIR)
-	@echo "Compiling with Verilator..." > $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE)
+	
+	@echo "$(VERILATOR) $(VERILATOR_FLAGS) --cc $(SVDB_DPI_PKG) $(SV_SOURCES) $(SVDB_VERILATOR_FLAG) --top-module $(TOP_MODULE) --exe $(CPP_SOURCES) --Mdir $(OUTPUT_DIR)/obj_dir >> $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE) 2>&1 || { cat $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE); exit 1; }"
 	$(VERILATOR) $(VERILATOR_FLAGS) --cc $(SVDB_DPI_PKG) $(SV_SOURCES) $(SVDB_VERILATOR_FLAG) --top-module $(TOP_MODULE) --exe $(CPP_SOURCES) --Mdir $(OUTPUT_DIR)/obj_dir >> $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE) 2>&1 || { cat $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE); exit 1; }
+	
 	@echo "Command: make -C $(OUTPUT_DIR)/obj_dir -j -f V$(TOP_MODULE).mk V$(TOP_MODULE)" >> $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE)
 	@if [ -d "$(OUTPUT_DIR)/obj_dir" ]; then \
 		make -C $(OUTPUT_DIR)/obj_dir -j -f V$(TOP_MODULE).mk V$(TOP_MODULE) >> $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE) 2>&1 || { cat $(OUTPUT_DIR)/$(COMPILATION_LOG_FILE); exit 1; }; \
