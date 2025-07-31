@@ -598,7 +598,18 @@ function register_fields_t svdb_dynamic_reg::get_fields_for_register(int reg_row
   string reg_id_str;
   int max_field_rows = 256;
   int field_idx;
+  string field_access;
+  string field_volatile;
+  string field_reset_value;
+  string field_modified_write;
+  string field_read_action;
+  string reg_access;
+  string reg_reset_value;
   fields_struct.num_fields = 0;
+  
+  // Get register attributes for comparison
+  reg_access = sqlite_dpi_get_cell_value(SqliteDB, "registers", reg_row_id, "access");
+  reg_reset_value = sqlite_dpi_get_cell_value(SqliteDB, "registers", reg_row_id, "resetValue");
   
   // First pass: count the number of fields for this register
   for (field_row_id = 1; field_row_id <= max_field_rows; field_row_id++) begin
@@ -623,11 +634,27 @@ function register_fields_t svdb_dynamic_reg::get_fields_for_register(int reg_row
     fields_struct.fields[field_idx].resetValue = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "resetValue");
     fields_struct.fields[field_idx].bitOffset = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "bitOffset").atoi();
     fields_struct.fields[field_idx].bitWidth = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "bitWidth").atoi();
-    fields_struct.fields[field_idx].individually_accessible = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "individually_accessible").atoi();
+    // Derive individually_accessible based on field attributes that distinguish it from the register
+    // If field has different access, volatile behavior, reset value, or other distinguishing attributes, mark as individually accessible
+    
+    field_access = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "access");
+    field_volatile = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "volatile");
+    field_reset_value = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "resetValue");
+    field_modified_write = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "modifiedWriteValue");
+    field_read_action = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "readAction");
+    
+    // Check if field has distinguishing attributes
+    fields_struct.fields[field_idx].individually_accessible = 
+      (field_access != "" && field_access != reg_access) ||                  // Different access type
+      (field_volatile != "" && field_volatile != "0") ||                    // Field is volatile
+      (field_reset_value != "" && field_reset_value != reg_reset_value) ||   // Different reset value
+      (field_modified_write != "") ||                                        // Has modified write behavior
+      (field_read_action != "") ? 1 : 0;                                    // Has read action
     fields_struct.fields[field_idx].is_random = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "rand").atoi();
     fields_struct.fields[field_idx].mirror = sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "mirror").atoi();
     fields_struct.fields[field_idx].volatile_val = (sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "volatile") == "") ? 0 : sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "volatile").atoi();
-    fields_struct.fields[field_idx].has_reset_val = (sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "has_reset") == "") ? 1 : sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "has_reset").atoi();
+    // Derive has_reset from whether resetValue exists (is not empty)
+    fields_struct.fields[field_idx].has_reset_val = (sqlite_dpi_get_cell_value(SqliteDB, "fields", field_row_id, "resetValue") == "") ? 0 : 1;
     field_idx++;
   end
   return fields_struct;
@@ -658,19 +685,23 @@ function register_attributes_t svdb_dynamic_reg::get_register_attributes(string 
   reg_attrs.size = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "size");
   reg_attrs.access = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "access");
   reg_attrs.resetValue = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "resetValue");
-  reg_attrs.lsb_pos_str = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "lsb_pos");
+  // lsb_pos removed from schema
   reg_attrs.volatile_str = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "volatile");
-  reg_attrs.has_reset_str = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "has_reset");
+  // has_reset is derived from resetValue, not stored separately
   reg_attrs.is_rand_str = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "rand");
-  reg_attrs.individually_accessible_str = sqlite_dpi_get_cell_value(SqliteDB, "registers", row_id, "individually_accessible");
+  // individually_accessible is derived from field attributes, not stored separately
   
   // Process and convert values
   reg_attrs.reset_value = str_to_hex(reg_attrs.resetValue);
-  reg_attrs.lsb_pos = (reg_attrs.lsb_pos_str == "") ? 0 : reg_attrs.lsb_pos_str.atoi();
+  // lsb_pos removed from schema, using 0 as default
+  // reg_attrs.lsb_pos = 0; // Field removed from struct
   reg_attrs.volatile_val = (reg_attrs.volatile_str == "") ? 0 : reg_attrs.volatile_str.atoi();
-  reg_attrs.has_reset_val = (reg_attrs.has_reset_str == "") ? 1 : reg_attrs.has_reset_str.atoi();
+  // Derive has_reset from whether resetValue exists (is not empty)
+  reg_attrs.has_reset_val = (reg_attrs.resetValue == "") ? 0 : 1;
   reg_attrs.is_rand_val = (reg_attrs.is_rand_str == "") ? 0 : reg_attrs.is_rand_str.atoi();
-  reg_attrs.individually_accessible_val = (reg_attrs.individually_accessible_str == "") ? 0 : reg_attrs.individually_accessible_str.atoi();
+  // For registers, individually_accessible is determined by whether any fields are individually accessible
+  // This will be set when processing fields in configure_register function
+  reg_attrs.individually_accessible_val = 0; // Default, will be updated during field processing
   
   // Convert size to width
   reg_attrs.width = reg_attrs.size.atoi();
@@ -733,7 +764,7 @@ function svdb_dynamic_reg svdb_dynamic_reg::configure_register(string reg_name);
     field.configure(
       .parent(this),
       .size(fields_struct.fields[f].bitWidth),
-      .lsb_pos(fields_struct.fields[f].bitOffset),
+      .lsb_pos(fields_struct.fields[f].bitOffset), // Using bitOffset as lsb_pos
       .access(acc_f),
       .volatile(fields_struct.fields[f].volatile_val),
       .reset(reset_val_f),

@@ -52,7 +52,6 @@ CREATE TABLE memoryMaps (
     memoryMapRef TEXT,              -- <spirit:memoryMapRef> or <ipxact:memoryMapRef>
     systemGroup TEXT,               -- <spirit:systemGroup> or <ipxact:systemGroup>
     shared BOOLEAN DEFAULT 0,       -- <spirit:shared> or <ipxact:shared>
-    bitsInLau INTEGER,              -- <spirit:bitsInLau> or <ipxact:bitsInLau>
     bankAlignment TEXT,             -- <spirit:bankAlignment> or <ipxact:bankAlignment>
     remapAddress TEXT,              -- <spirit:remapAddress> or <ipxact:remapAddress>
     remapState TEXT,                -- <spirit:remapState> or <ipxact:remapState>
@@ -94,7 +93,8 @@ CREATE TABLE addressBlocks (
     accessHandleType TEXT,         -- <spirit:accessHandleType> or <ipxact:accessHandleType>
     FOREIGN KEY (memoryMap_id) REFERENCES memoryMaps(id) ON DELETE CASCADE,
     UNIQUE(memoryMap_id, name),
-    CHECK (access IN ('read-only', 'write-only', 'read-write', 'writeOnce', 'read-writeOnce'))
+    CHECK (access IN ('read-only', 'write-only', 'read-write', 'writeOnce', 'read-writeOnce')),
+    CHECK (usage IN ('register', 'memory'))
 );
 
 -- Registers table - stores register information
@@ -155,6 +155,8 @@ CREATE TABLE registers (
     designComponent TEXT,         -- <spirit:designComponent> or <ipxact:designComponent>
     abstractorGenerator TEXT,     -- <spirit:abstractorGenerator> or <ipxact:abstractorGenerator>
     generatorChain TEXT,          -- <spirit:generatorChain> or <ipxact:generatorChain>
+    -- UVM-specific columns for SystemVerilog compatibility
+    rand BOOLEAN DEFAULT 0,       -- UVM random field flag
     FOREIGN KEY (addressBlock_id) REFERENCES addressBlocks(id) ON DELETE CASCADE,
     CHECK (access IN ('read-only', 'write-only', 'read-write', 'writeOnce', 'read-writeOnce')),
     CHECK (dataType IN ('string', 'integer', 'boolean', 'float', 'hex', 'binary')),
@@ -202,6 +204,10 @@ CREATE TABLE fields (
     enumName TEXT,                 -- <spirit:enumeratedValue/spirit:name> or <ipxact:enumeratedValue/ipxact:name>
     enumValue TEXT,                -- <spirit:enumeratedValue/spirit:value> or <ipxact:enumeratedValue/ipxact:value>
     enumDisplayName TEXT,          -- <spirit:enumeratedValue/spirit:displayName> or <ipxact:enumeratedValue/ipxact:displayName>
+    -- UVM-specific columns for SystemVerilog compatibility
+    rand BOOLEAN DEFAULT 0,        -- UVM random field flag
+    mirror INTEGER DEFAULT 0,      -- UVM mirror field flag
+    volatile BOOLEAN DEFAULT 0,    -- UVM volatile field flag (alias for isVolatile)
     FOREIGN KEY (register_id) REFERENCES registers(id) ON DELETE CASCADE,
     CHECK (access IN ('read-only', 'write-only', 'read-write', 'writeOnce', 'read-writeOnce')),
     CHECK (isVolatile IN (0, 1)),
@@ -244,6 +250,9 @@ CREATE TABLE busInterfaces (
     portMap TEXT,                  -- <spirit:portMap> or <ipxact:portMap>
     abstractionRef TEXT,           -- <spirit:abstractionRef> or <ipxact:abstractionRef>
     monitorType TEXT,              -- <spirit:monitorType> or <ipxact:monitorType>
+    -- New attributes from example_registers.xml
+    bitsInLau INTEGER,             -- <ipxact:bitsInLau>
+    memoryMapRef TEXT,             -- <ipxact:memoryMapRef>
     FOREIGN KEY (metadata_id) REFERENCES metadata(id) ON DELETE CASCADE,
     CHECK (interfaceMode IN ('master', 'slave', 'system')),
     CHECK (endianness IN ('big', 'little')),

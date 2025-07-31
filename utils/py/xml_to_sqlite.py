@@ -445,15 +445,18 @@ class XMLToSQLite:
                 if reset_mask_elem is not None and reset_mask_elem.text:
                     resetMask = reset_mask_elem.text
 
+            # Set UVM-specific defaults
+            rand = False  # Default to False
+
             logger.debug(f"Inserting register: name={name}, offset={address_offset}, size={size}, access={access}, resetValue={resetValue}, resetMask={resetMask}")
             self.cursor.execute('''
                 INSERT INTO registers (
                     addressBlock_id, name, description, addressOffset,
-                    size, access, volatile, resetValue, resetMask
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    size, access, volatile, resetValue, resetMask, rand
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 address_block_id, name, description, address_offset,
-                size, access, volatile, resetValue, resetMask
+                size, access, volatile, resetValue, resetMask, rand
             ))
 
             reg_id = self.cursor.lastrowid
@@ -591,12 +594,17 @@ class XMLToSQLite:
             enumValue = self.get_text(field, 'enumValue')
             enumDisplayName = self.get_text(field, 'enumDisplayName')
 
+            # Set UVM-specific defaults
+            rand = False  # Default to False
+            mirror = 0  # Default to 0 (integer)
+            volatile = isVolatile  # Use the same value as isVolatile
+
             self.cursor.execute('''
                 INSERT INTO fields (
-                    register_id, name, description, displayName, bitOffset, bitWidth, access, resetValue, resetTypeRef, resetTrigger, resetPolarity, resetSynchronization, resetDomain, resetDependency, resetSequence, resetMask, isVolatile, isReserved, modifiedWriteValue, readAction, writeValueConstraint, testable, isPresent, dependence, typeIdentifier, enumValuesRef, longDescription, groupName, displayGroup, alternateGroups, usage, enumName, enumValue, enumDisplayName
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    register_id, name, description, displayName, bitOffset, bitWidth, access, resetValue, resetTypeRef, resetTrigger, resetPolarity, resetSynchronization, resetDomain, resetDependency, resetSequence, resetMask, isVolatile, isReserved, modifiedWriteValue, readAction, writeValueConstraint, testable, isPresent, dependence, typeIdentifier, enumValuesRef, longDescription, groupName, displayGroup, alternateGroups, usage, enumName, enumValue, enumDisplayName, rand, mirror, volatile
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                register_id, name, description, displayName, bitOffset, bitWidth, access, resetValue, resetTypeRef, resetTrigger, resetPolarity, resetSynchronization, resetDomain, resetDependency, resetSequence, resetMask, isVolatile, isReserved, modifiedWriteValue, readAction, writeValueConstraint, testable, isPresent, dependence, typeIdentifier, enumValuesRef, longDescription, groupName, displayGroup, alternateGroups, usage, enumName, enumValue, enumDisplayName
+                register_id, name, description, displayName, bitOffset, bitWidth, access, resetValue, resetTypeRef, resetTrigger, resetPolarity, resetSynchronization, resetDomain, resetDependency, resetSequence, resetMask, isVolatile, isReserved, modifiedWriteValue, readAction, writeValueConstraint, testable, isPresent, dependence, typeIdentifier, enumValuesRef, longDescription, groupName, displayGroup, alternateGroups, usage, enumName, enumValue, enumDisplayName, rand, mirror, volatile
             ))
 
             # Process enumerations if they exist

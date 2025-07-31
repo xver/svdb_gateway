@@ -79,14 +79,14 @@ Members:
   size - Register size as string
   access - Access type as string
   resetValue - Reset value as string
-  lsb_pos_str - LSB position as string
+  -- lsb_pos removed from schema
   volatile_str - Volatile flag as string
   has_reset_str - Has reset flag as string
   is_rand_str - Is random flag as string
   individually_accessible_str - Individually accessible flag as string
   width - Register width in bits
   reset_value - Reset value as 32-bit logic
-  lsb_pos - LSB position as integer
+  -- lsb_pos removed from schema
   volatile_val - Volatile flag as integer
   has_reset_val - Has reset flag as integer
   is_rand_val - Is random flag as integer
@@ -98,14 +98,12 @@ typedef struct {
   string size;
   string access;
   string resetValue;
-  string lsb_pos_str;
   string volatile_str;
   string has_reset_str;
   string is_rand_str;
   string individually_accessible_str;
   int width;
   logic [31:0] reset_value;
-  int lsb_pos;
   int volatile_val;
   int has_reset_val;
   int is_rand_val;

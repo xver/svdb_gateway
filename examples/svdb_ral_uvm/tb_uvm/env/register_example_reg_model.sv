@@ -16,7 +16,7 @@ class dynamic_config_reg extends svdb_dynamic_reg;
     dyn_field.configure(
       .parent(this),
       .size(32),
-      .lsb_pos(0),
+      .lsb_pos(0), // Using default lsb_pos
       .access("RW"),
       .volatile(0),
       .reset(32'h0),
@@ -27,7 +27,7 @@ class dynamic_config_reg extends svdb_dynamic_reg;
     // Store config
     access_mode = "RW";
     field_size = 32;
-    field_lsb_pos = 0;
+    field_lsb_pos = 0; // Using default lsb_pos
     field_volatile = 0;
     field_reset = 32'h0;
     field_has_reset = 1;

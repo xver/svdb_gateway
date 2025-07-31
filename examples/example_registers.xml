@@ -12,16 +12,36 @@
   <ipxact:version>1.0</ipxact:version>
   <ipxact:description>Example component with different register types</ipxact:description>
 
+  <ipxact:busInterfaces>
+    <ipxact:busInterface>
+      <ipxact:name>example_interface</ipxact:name>
+      <ipxact:busType vendor="" library="" name="" version=""/>
+      <ipxact:abstractionTypes>
+        <ipxact:abstractionType>
+          <ipxact:abstractionRef vendor="" library="" name="" version=""/>
+        </ipxact:abstractionType>
+      </ipxact:abstractionTypes>
+      <ipxact:slave>
+        <ipxact:memoryMapRef memoryMapRef="main_memory_map"/>
+      </ipxact:slave>
+      <ipxact:bitsInLau>32</ipxact:bitsInLau>
+      <ipxact:typeIdentifier>example_bus_interface_type</ipxact:typeIdentifier>
+    </ipxact:busInterface>
+  </ipxact:busInterfaces>
+
   <ipxact:memoryMaps>
     <ipxact:memoryMap>
       <ipxact:name>main_memory_map</ipxact:name>
       <ipxact:description>Main register memory map</ipxact:description>
+      <ipxact:typeIdentifier>main_memory_map_type</ipxact:typeIdentifier>
 
       <ipxact:addressBlock>
         <ipxact:name>register_block</ipxact:name>
         <ipxact:baseAddress>'h00</ipxact:baseAddress>
         <ipxact:range>'h1000</ipxact:range>
         <ipxact:width>32</ipxact:width>
+        <ipxact:usage>register</ipxact:usage>
+        <ipxact:typeIdentifier>example_register_block</ipxact:typeIdentifier>
 
         <ipxact:vendorExtensions>
           <ic_verimeter:extensions>
@@ -36,15 +56,26 @@
           <ipxact:size>32</ipxact:size>
           <ipxact:access>read-only</ipxact:access>
           <ipxact:description>Status register containing system state information</ipxact:description>
+          <ipxact:volatile>true</ipxact:volatile>
+          <ipxact:typeIdentifier>status_register_type</ipxact:typeIdentifier>
+          <ipxact:resets>
+            <ipxact:reset>
+              <ipxact:value>32'h00000000</ipxact:value>
+              <ipxact:mask>32'hFFFFFFFF</ipxact:mask>
+            </ipxact:reset>
+          </ipxact:resets>
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>system_ready</ipxact:name>
+              <ipxact:displayName>System Ready</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Indicates if the system is ready</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
+              <ipxact:typeIdentifier>system_ready_field_type</ipxact:typeIdentifier>
               <ipxact:resets>
-                <ipxact:reset>
+                <ipxact:reset resetTypeRef="sync_reset_all">
                   <ipxact:value>1'h0</ipxact:value>
                   <ipxact:mask>1'h1</ipxact:mask>
                 </ipxact:reset>
@@ -65,15 +96,27 @@
           <ipxact:size>32</ipxact:size>
           <ipxact:access>write-only</ipxact:access>
           <ipxact:description>Control register for system configuration</ipxact:description>
+          <ipxact:volatile>false</ipxact:volatile>
+          <ipxact:typeIdentifier>control_register_type</ipxact:typeIdentifier>
+          <ipxact:resets>
+            <ipxact:reset>
+              <ipxact:value>32'h00000000</ipxact:value>
+              <ipxact:mask>32'hFFFFFFFF</ipxact:mask>
+            </ipxact:reset>
+          </ipxact:resets>
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>reset_system</ipxact:name>
+              <ipxact:displayName>Reset System</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>write-only</ipxact:access>
               <ipxact:description>Writing 1 resets the system</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+              <ipxact:modifiedWriteValue>modify</ipxact:modifiedWriteValue>
+              <ipxact:typeIdentifier>reset_system_field_type</ipxact:typeIdentifier>
               <ipxact:resets>
-                <ipxact:reset>
+                <ipxact:reset resetTypeRef="HARD">
                   <ipxact:value>1'h1</ipxact:value>
                   <ipxact:mask>1'h1</ipxact:mask>
                 </ipxact:reset>
@@ -94,13 +137,24 @@
           <ipxact:size>32</ipxact:size>
           <ipxact:access>read-write</ipxact:access>
           <ipxact:description>Configuration register for system settings</ipxact:description>
+          <ipxact:volatile>false</ipxact:volatile>
+          <ipxact:typeIdentifier>configuration_register_type</ipxact:typeIdentifier>
+          <ipxact:resets>
+            <ipxact:reset>
+              <ipxact:value>32'h00000000</ipxact:value>
+              <ipxact:mask>32'hFFFFFFFF</ipxact:mask>
+            </ipxact:reset>
+          </ipxact:resets>
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>operation_mode</ipxact:name>
+              <ipxact:displayName>Operation Mode</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>2</ipxact:bitWidth>
               <ipxact:access>read-write</ipxact:access>
               <ipxact:description>Operation mode selection</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+              <ipxact:typeIdentifier>operation_mode_field_type</ipxact:typeIdentifier>
               <ipxact:enumeratedValues>
                 <ipxact:enumeratedValue>
                   <ipxact:name>mode_normal</ipxact:name>
@@ -116,7 +170,7 @@
                 </ipxact:enumeratedValue>
               </ipxact:enumeratedValues>
               <ipxact:resets>
-                <ipxact:reset>
+                <ipxact:reset resetTypeRef="SOFT">
                   <ipxact:value>2'h2</ipxact:value>
                   <ipxact:mask>2'h3</ipxact:mask>
                 </ipxact:reset>
@@ -137,13 +191,24 @@
           <ipxact:size>32</ipxact:size>
           <ipxact:access>read-writeOnce</ipxact:access>
           <ipxact:description>Security configuration register that can only be written once</ipxact:description>
+          <ipxact:volatile>false</ipxact:volatile>
+          <ipxact:typeIdentifier>security_register_type</ipxact:typeIdentifier>
+          <ipxact:resets>
+            <ipxact:reset resetTypeRef="SOFT">
+              <ipxact:value>32'h00000000</ipxact:value>
+              <ipxact:mask>32'hFFFFFFFF</ipxact:mask>
+            </ipxact:reset>
+          </ipxact:resets>
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>security_level</ipxact:name>
+              <ipxact:displayName>Security Level</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>2</ipxact:bitWidth>
               <ipxact:access>read-writeOnce</ipxact:access>
               <ipxact:description>Security level configuration</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+              <ipxact:typeIdentifier>security_level_field_type</ipxact:typeIdentifier>
               <ipxact:enumeratedValues>
                 <ipxact:enumeratedValue>
                   <ipxact:name>level_low</ipxact:name>
@@ -159,7 +224,7 @@
                 </ipxact:enumeratedValue>
               </ipxact:enumeratedValues>
               <ipxact:resets>
-                <ipxact:reset>
+                <ipxact:reset resetTypeRef="SOFT">
                   <ipxact:value>2'h3</ipxact:value>
                   <ipxact:mask>2'h3</ipxact:mask>
                 </ipxact:reset>
@@ -180,6 +245,8 @@
           <ipxact:size>8</ipxact:size>
           <ipxact:access>read-only</ipxact:access>
           <ipxact:description>Individual status flags for error and operation</ipxact:description>
+          <ipxact:volatile>true</ipxact:volatile>
+          <ipxact:typeIdentifier>status_flags_register_type</ipxact:typeIdentifier>
           <!-- register-level reset value > 5 -->
           <ipxact:resets>
             <ipxact:reset>
@@ -190,10 +257,12 @@
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>overflow_flag</ipxact:name>
+              <ipxact:displayName>Overflow Flag</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Set on arithmetic overflow</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -203,10 +272,12 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>underflow_flag</ipxact:name>
+              <ipxact:displayName>Underflow Flag</ipxact:displayName>
               <ipxact:bitOffset>1</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Set on arithmetic underflow</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -216,10 +287,12 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>parity_error</ipxact:name>
+              <ipxact:displayName>Parity Error</ipxact:displayName>
               <ipxact:bitOffset>2</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Set when parity check fails</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -229,10 +302,12 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>timeout_error</ipxact:name>
+              <ipxact:displayName>Timeout Error</ipxact:displayName>
               <ipxact:bitOffset>3</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Set on operation timeout</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -242,10 +317,13 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>reserved_flags</ipxact:name>
+              <ipxact:displayName>Reserved</ipxact:displayName>
               <ipxact:bitOffset>4</ipxact:bitOffset>
               <ipxact:bitWidth>4</ipxact:bitWidth>
               <ipxact:access>read-only</ipxact:access>
               <ipxact:description>Reserved bits</ipxact:description>
+              <ipxact:volatile>true</ipxact:volatile>
+              <ipxact:reserved>true</ipxact:reserved>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>4'h0</ipxact:value>
@@ -268,9 +346,11 @@
           <ipxact:size>4</ipxact:size>
           <ipxact:access>read-write</ipxact:access>
           <ipxact:description>Individual control bits for feature enable, reset, lock, and mode</ipxact:description>
+          <ipxact:volatile>false</ipxact:volatile>
+          <ipxact:typeIdentifier>control_bits_register_type</ipxact:typeIdentifier>
           <!-- register-level reset value > 5 and unique -->
           <ipxact:resets>
-            <ipxact:reset>
+            <ipxact:reset resetTypeRef="HARD">
               <ipxact:value>4'h7</ipxact:value>
               <ipxact:mask>4'hF</ipxact:mask>
             </ipxact:reset>
@@ -278,10 +358,12 @@
           <ipxact:fields>
             <ipxact:field>
               <ipxact:name>feature_enable</ipxact:name>
+              <ipxact:displayName>Feature Enable</ipxact:displayName>
               <ipxact:bitOffset>0</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-write</ipxact:access>
               <ipxact:description>Enables the main feature</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -291,10 +373,13 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>system_reset</ipxact:name>
+              <ipxact:displayName>System Reset</ipxact:displayName>
               <ipxact:bitOffset>1</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-write</ipxact:access>
               <ipxact:description>Triggers a soft reset when set</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+              <ipxact:modifiedWriteValue>modify</ipxact:modifiedWriteValue>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -304,10 +389,12 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>configuration_lock</ipxact:name>
+              <ipxact:displayName>Configuration Lock</ipxact:displayName>
               <ipxact:bitOffset>2</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-write</ipxact:access>
               <ipxact:description>Locks configuration bits when set</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -317,10 +404,12 @@
             </ipxact:field>
             <ipxact:field>
               <ipxact:name>mode_select</ipxact:name>
+              <ipxact:displayName>Mode Select</ipxact:displayName>
               <ipxact:bitOffset>3</ipxact:bitOffset>
               <ipxact:bitWidth>1</ipxact:bitWidth>
               <ipxact:access>read-write</ipxact:access>
               <ipxact:description>Selects alternate operating mode</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
               <ipxact:resets>
                 <ipxact:reset>
                   <ipxact:value>1'h0</ipxact:value>
@@ -336,6 +425,104 @@
           </ipxact:vendorExtensions>
         </ipxact:register>
 
+        <!-- Mixed Reset Types Register -->
+        <ipxact:register>
+          <ipxact:name>mixed_reset_register</ipxact:name>
+          <ipxact:addressOffset>'h18</ipxact:addressOffset>
+          <ipxact:size>32</ipxact:size>
+          <ipxact:access>read-write</ipxact:access>
+          <ipxact:description>Register demonstrating both HARD and SOFT reset types</ipxact:description>
+          <ipxact:volatile>false</ipxact:volatile>
+          <ipxact:typeIdentifier>mixed_reset_register_type</ipxact:typeIdentifier>
+          <ipxact:resets>
+            <ipxact:reset>
+              <ipxact:value>32'h00000000</ipxact:value>
+              <ipxact:mask>32'hFFFFFFFF</ipxact:mask>
+            </ipxact:reset>
+          </ipxact:resets>
+          <ipxact:fields>
+                         <ipxact:field>
+               <ipxact:name>hard_reset_field</ipxact:name>
+               <ipxact:displayName>Hard Reset Field</ipxact:displayName>
+               <ipxact:bitOffset>0</ipxact:bitOffset>
+               <ipxact:bitWidth>8</ipxact:bitWidth>
+               <ipxact:access>read-write</ipxact:access>
+               <ipxact:description>Field that resets on HARD reset only (default)</ipxact:description>
+               <ipxact:volatile>false</ipxact:volatile>
+               <ipxact:resets>
+                 <ipxact:reset>
+                   <ipxact:value>8'h00</ipxact:value>
+                   <ipxact:mask>8'hFF</ipxact:mask>
+                 </ipxact:reset>
+               </ipxact:resets>
+             </ipxact:field>
+            <ipxact:field>
+              <ipxact:name>soft_reset_field</ipxact:name>
+              <ipxact:displayName>Soft Reset Field</ipxact:displayName>
+              <ipxact:bitOffset>8</ipxact:bitOffset>
+              <ipxact:bitWidth>8</ipxact:bitWidth>
+              <ipxact:access>read-write</ipxact:access>
+              <ipxact:description>Field that resets on SOFT reset only</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+              <ipxact:resets>
+                <ipxact:reset resetTypeRef="SOFT">
+                  <ipxact:value>8'h00</ipxact:value>
+                  <ipxact:mask>8'hFF</ipxact:mask>
+                </ipxact:reset>
+              </ipxact:resets>
+            </ipxact:field>
+                         <ipxact:field>
+               <ipxact:name>both_reset_field</ipxact:name>
+               <ipxact:displayName>Both Reset Field</ipxact:displayName>
+               <ipxact:bitOffset>16</ipxact:bitOffset>
+               <ipxact:bitWidth>8</ipxact:bitWidth>
+               <ipxact:access>read-write</ipxact:access>
+               <ipxact:description>Field that resets on both HARD and SOFT reset</ipxact:description>
+               <ipxact:volatile>false</ipxact:volatile>
+               <ipxact:resets>
+                 <ipxact:reset>
+                   <ipxact:value>8'h00</ipxact:value>
+                   <ipxact:mask>8'hFF</ipxact:mask>
+                 </ipxact:reset>
+                 <ipxact:reset resetTypeRef="SOFT">
+                   <ipxact:value>8'h00</ipxact:value>
+                   <ipxact:mask>8'hFF</ipxact:mask>
+                 </ipxact:reset>
+               </ipxact:resets>
+             </ipxact:field>
+            <ipxact:field>
+              <ipxact:name>no_reset_field</ipxact:name>
+              <ipxact:displayName>No Reset Field</ipxact:displayName>
+              <ipxact:bitOffset>24</ipxact:bitOffset>
+              <ipxact:bitWidth>8</ipxact:bitWidth>
+              <ipxact:access>read-write</ipxact:access>
+              <ipxact:description>Field that does not reset (no reset specification)</ipxact:description>
+              <ipxact:volatile>false</ipxact:volatile>
+            </ipxact:field>
+          </ipxact:fields>
+          <ipxact:vendorExtensions>
+            <ic_verimeter:extensions>
+              <ic_verimeter:hdlAccess ic_verimeter:path="mixed_reset_register"/>
+            </ic_verimeter:extensions>
+          </ipxact:vendorExtensions>
+        </ipxact:register>
+
+      </ipxact:addressBlock>
+
+      <!-- Memory Address Block Example -->
+      <ipxact:addressBlock>
+        <ipxact:name>memory_block</ipxact:name>
+        <ipxact:baseAddress>'h2000</ipxact:baseAddress>
+        <ipxact:range>'h1000</ipxact:range>
+        <ipxact:width>32</ipxact:width>
+        <ipxact:usage>memory</ipxact:usage>
+        <ipxact:typeIdentifier>example_memory_block</ipxact:typeIdentifier>
+        <ipxact:description>Example memory block for data storage</ipxact:description>
+        <ipxact:vendorExtensions>
+          <ic_verimeter:extensions>
+            <ic_verimeter:hdlAccess ic_verimeter:path="memory_block"/>
+          </ic_verimeter:extensions>
+        </ipxact:vendorExtensions>
       </ipxact:addressBlock>
 
       <ipxact:addressUnitBits>32</ipxact:addressUnitBits>

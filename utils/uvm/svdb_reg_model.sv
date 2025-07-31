@@ -52,7 +52,7 @@ class svdb_reg_model extends svdb_dynamic_reg;
     dyn_field.configure(
       .parent(this),
       .size(32),
-      .lsb_pos(0),
+      .lsb_pos(0), // Using default lsb_pos
       .access("RW"),
       .volatile(0),
       .reset(32'h0),
@@ -63,7 +63,7 @@ class svdb_reg_model extends svdb_dynamic_reg;
     // Store config
     access_mode = "RW";
     field_size = 32;
-    field_lsb_pos = 0;
+    field_lsb_pos = 0; // Using default lsb_pos
     field_volatile = 0;
     field_reset = 32'h0;
     field_has_reset = 1;
@@ -87,6 +87,33 @@ class svdb_reg_block extends uvm_reg_block;
   `uvm_object_utils(svdb_reg_block)
 
   /*
+  Variable: base_addr
+  Base address for the register block
+
+  This variable holds the base address for the register block.
+  Default value is 0.
+  */
+  protected uvm_reg_addr_t base_addr = 0;
+
+  /*
+  Variable: n_bytes
+  Number of bytes for the register block
+
+  This variable holds the number of bytes for the register block.
+  Default value is 4.
+  */
+  protected int unsigned n_bytes = 4;
+
+  /*
+  Variable: byte_addressing
+  Byte addressing mode for the register block
+
+  This variable controls whether the register block uses byte addressing (1)
+  or word addressing (0). Default value is 1 (byte addressing).
+  */
+  protected bit byte_addressing = 1;
+
+  /*
   Variable: svdb_reg_config
   Configurable register model instance
 
@@ -108,6 +135,72 @@ class svdb_reg_block extends uvm_reg_block;
   endfunction
 
   /*
+  Function: set_base_addr
+  Sets the base address for the register block
+
+  Parameter: addr
+  Base address to set for the register block
+  */
+  virtual function void set_base_addr(uvm_reg_addr_t addr);
+    base_addr = addr;
+  endfunction
+
+  /*
+  Function: get_base_addr
+  Gets the base address for the register block
+
+  Returns: uvm_reg_addr_t
+  Current base address of the register block
+  */
+  virtual function uvm_reg_addr_t get_base_addr();
+    return base_addr;
+  endfunction
+
+  /*
+  Function: set_n_bytes
+  Sets the number of bytes for the register block
+
+  Parameter: bytes
+  Number of bytes to set for the register block
+  */
+  virtual function void set_n_bytes(int unsigned bytes);
+    n_bytes = bytes;
+  endfunction
+
+  /*
+  Function: get_n_bytes
+  Gets the number of bytes for the register block
+
+  Returns: int unsigned
+  Current number of bytes of the register block
+  */
+  virtual function int unsigned get_n_bytes();
+    return n_bytes;
+  endfunction
+
+  /*
+  Function: set_byte_addressing
+  Sets the byte addressing mode for the register block
+
+  Parameter: mode
+  Byte addressing mode: 1 for byte addressing, 0 for word addressing
+  */
+  virtual function void set_byte_addressing(bit mode);
+    byte_addressing = mode;
+  endfunction
+
+  /*
+  Function: get_byte_addressing
+  Gets the byte addressing mode for the register block
+
+  Returns: bit
+  Current byte addressing mode: 1 for byte addressing, 0 for word addressing
+  */
+  virtual function bit get_byte_addressing();
+    return byte_addressing;
+  endfunction
+
+  /*
   Function: build
   Builds the register block with default configuration
 
@@ -118,7 +211,7 @@ class svdb_reg_block extends uvm_reg_block;
     svdb_reg_config = svdb_reg_model::type_id::create("svdb_reg_config",,get_full_name());
     svdb_reg_config.build();
     // Register map
-    this.default_map = create_map("default_map", 0, 4, UVM_LITTLE_ENDIAN, 1);
+    this.default_map = create_map(.name("default_map"), .base_addr(base_addr), .n_bytes(n_bytes), .endian(UVM_LITTLE_ENDIAN), .byte_addressing(byte_addressing));
     svdb_reg_config.configure(this, null, "svdb_reg_config");
     default_map.add_reg(svdb_reg_config, 'h0, "RW");
   endfunction
