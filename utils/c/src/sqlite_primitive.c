@@ -139,13 +139,17 @@ const char* sqlite_prim_get_cell_value(sqlite3* db, const char* table, int row_i
         if (text) {
             result = strdup((const char*)text);
         }
-    } else {
+    } 
+    /*
+    else { //TODO: Verilator init warning: C_PRIM SVDB [sqlite_prim_get_cell_value]: No row found with rowid 240 or other SQL error: no more rows available
+
         err_print("C_PRIM", "sqlite_prim_get_cell_value", "No row found with rowid %d or other SQL error: %s\n", row_id, sqlite3_errmsg(db));
     }
-
+    */
     sqlite3_finalize(stmt);
     dbg_print("C_PRIM", "sqlite_prim_get_cell_value", "Returning value: %s\n", result ? result : "NULL");
     return result;
+
 }
 
 int sqlite_prim_get_row(sqlite3 *db, const char *table, int row_id, char ***columns, char ***values, int *col_count) {
