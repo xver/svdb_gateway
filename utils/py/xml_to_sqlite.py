@@ -6,10 +6,10 @@
 #
 # See LICENSE file in the project root for full license information.
 #
-# Description: Python script for converting IP-XACT XML files to SQLite database format.
-#              Handles both IP-XACT and SPIRIT namespaces and preserves original XML content.
-#              Provides comprehensive XML parsing, database schema management, and
-#              detailed error reporting.
+# Description: 
+#  - Python script for converting IP-XACT XML files to SQLite database format.
+#  - Handles both IP-XACT and SPIRIT namespaces and preserves original XML content.
+#  - Provides comprehensive XML parsing, database schema management, and detailed error reporting.
 
 #!/usr/bin/env python3
 
@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 
 # Class: XMLToSQLite
 #
-# Converts IP-XACT XML files to SQLite database format.
-# Handles both IP-XACT and SPIRIT namespaces and preserves original XML content.
-# Provides comprehensive XML parsing, database schema management, and error reporting.
+#  - Converts IP-XACT XML files to SQLite database format.
+#  - Handles both IP-XACT and SPIRIT namespaces and preserves original XML content.
+#  - Provides comprehensive XML parsing, database schema management, and error reporting.
 #
 # The class supports:
+#
 # - Multiple XML file processing
 # - Original XML content preservation
 # - Detailed logging and error reporting
@@ -44,6 +45,7 @@ class XMLToSQLite:
     # Initialize the converter with database path and configuration.
     #
     # Parameters:
+    #
     #   db_path (str) - Path to the SQLite database file. The file will be created if it doesn't exist.
     #   debug (bool)  - Enable debug logging if True. When enabled, detailed debug information
     #                  will be logged about the conversion process.
@@ -104,7 +106,9 @@ class XMLToSQLite:
     #
     # Create database tables from schema.sql.
     # Drops existing tables if they exist to ensure a clean state.
+    #
     # The schema includes tables for:
+    #
     # - metadata: Component metadata and version information
     # - memoryMaps: Memory map definitions
     # - addressBlocks: Address block definitions
@@ -163,6 +167,7 @@ class XMLToSQLite:
     # Used to verify file integrity and detect changes.
     #
     # Parameters:
+    #
     #   file_path (str) - Path to the file to calculate checksum for
     #
     # Returns:
@@ -182,6 +187,7 @@ class XMLToSQLite:
     # Handles both IP-XACT and SPIRIT namespaces.
     #
     # Parameters:
+    #
     #   element (ET.Element) - XML element to search in
     #   tag (str)           - Tag name to find
     #   namespace (str)     - Namespace prefix (default: 'spirit')
@@ -228,6 +234,7 @@ class XMLToSQLite:
     # name, version, and description.
     #
     # Parameters:
+    #
     #   root (ET.Element) - Root XML element
     #   file_path (str)   - Path to source XML file
     #
@@ -274,8 +281,10 @@ class XMLToSQLite:
     #
     # Insert memory maps into database.
     #
-    # Parameters: root       - Root XML element
-    #           metadata_id - ID of the metadata record
+    # Parameters:
+    #
+    #   root       - Root XML element
+    #   metadata_id - ID of the metadata record
     def insert_memory_maps(self, root: ET.Element, metadata_id: int):
         """Insert memory maps into database."""
         memory_maps = root.findall('.//{*}memoryMap')
@@ -302,8 +311,9 @@ class XMLToSQLite:
     #
     # Insert address blocks into database.
     #
-    # Parameters: memory_map - Memory map XML element
-    #           memory_map_id - ID of the memory map
+    # Parameters:
+    #   memory_map - Memory map XML element
+    #   memory_map_id - ID of the memory map
     def insert_address_blocks(self, memory_map: ET.Element, memory_map_id: int):
         """Insert address blocks into database."""
         address_blocks = memory_map.findall('.//{*}addressBlock')
@@ -347,8 +357,9 @@ class XMLToSQLite:
     #
     # Insert registers into database.
     #
-    # Parameters: address_block - Address block XML element
-    #           address_block_id - ID of the address block
+    # Parameters:
+    #   address_block - Address block XML element
+    #   address_block_id - ID of the address block
     def insert_registers(self, address_block: ET.Element, address_block_id: int):
         """Insert registers into database."""
         # Find registers with explicit namespace
@@ -460,8 +471,10 @@ class XMLToSQLite:
     #
     # Insert fields into database.
     #
-    # Parameters: register - Register XML element
-    #           register_id - ID of the register
+    # Parameters:
+    #
+    #   register - Register XML element
+    #   register_id - ID of the register
     def insert_fields(self, register: ET.Element, register_id: int):
         """Insert fields into database."""
         # Find fields with explicit namespace
@@ -572,8 +585,10 @@ class XMLToSQLite:
     #
     # Insert bus interfaces into database.
     #
-    # Parameters: root       - Root XML element
-    #           metadata_id - ID of the metadata record
+    # Parameters:
+    #
+    #   root       - Root XML element
+    #   metadata_id - ID of the metadata record
     def insert_bus_interfaces(self, root: ET.Element, metadata_id: int):
         """Insert bus interfaces into database."""
         bus_interfaces = root.findall('.//{*}busInterface')
@@ -627,8 +642,10 @@ class XMLToSQLite:
     #
     # Insert ports into database.
     #
-    # Parameters: root       - Root XML element
-    #           metadata_id - ID of the metadata record
+    # Parameters:
+    #
+    #   root       - Root XML element
+    #   metadata_id - ID of the metadata record
     def insert_ports(self, root: ET.Element, metadata_id: int):
         """Insert ports into database."""
         ports = root.findall('.//{*}port')
@@ -746,8 +763,10 @@ class XMLToSQLite:
     #
     # Insert parameters into database.
     #
-    # Parameters: root       - Root XML element
-    #           metadata_id - ID of the metadata record
+    # Parameters:
+    #
+    #   root       - Root XML element
+    #   metadata_id - ID of the metadata record
     def insert_parameters(self, root: ET.Element, metadata_id: int):
         """Insert parameters into database."""
         parameters = root.findall('.//{*}parameter')
@@ -789,8 +808,10 @@ class XMLToSQLite:
     #
     # Insert vendor extensions into database.
     #
-    # Parameters: root       - Root XML element
-    #           metadata_id - ID of the metadata record
+    # Parameters:
+    #
+    #   root       - Root XML element
+    #   metadata_id - ID of the metadata record
     def insert_vendor_extensions(self, root: ET.Element, metadata_id: int):
         """Insert vendor extensions into database."""
         vendor_extensions = root.find('.//{*}vendorExtensions')
@@ -836,8 +857,10 @@ class XMLToSQLite:
     #
     # Insert enumerations into database.
     #
-    # Parameters: field    - Field XML element
-    #           field_id - ID of the field
+    # Parameters:
+    #
+    #   field    - Field XML element
+    #   field_id - ID of the field
     def insert_enumerations(self, field: ET.Element, field_id: int):
         """Insert enumerations into database."""
         enumerations = field.findall('.//{*}enumeratedValue')
@@ -861,7 +884,9 @@ class XMLToSQLite:
     #
     # Process XML file and convert to SQLite database.
     #
-    # Parameters: xml_file - Path to input XML file
+    # Parameters:
+    #
+    #   xml_file - Path to input XML file
     def process_xml_file(self, xml_file: str):
         """Process a single XML file and insert its data into the database."""
         try:
@@ -933,8 +958,10 @@ class XMLToSQLite:
     #
     # Extract component elements from XML content.
     #
-    # Parameters: xml_content - XML content as string
-    #           component_tag - Component tag name
+    # Parameters:
+    #
+    #   xml_content - XML content as string
+    #   component_tag - Component tag name
     # Returns: List of component elements
     def _extract_components(self, xml_content: str, component_tag: str) -> list:
         """Extract component XML sections from the content.
@@ -978,11 +1005,13 @@ class XMLToSQLite:
 # Main entry point for the script.
 # Parses command line arguments and processes XML files.
 #
+# --- code
 # Command line arguments:
 #   xml_file - Input XML file (optional if -f is used)
 #   -f, --file-list - File containing list of XML files to process
 #   -o, --output - Output SQLite database path (required)
 #   -d, --debug - Enable debug logging
+#---
 #
 # Example usage:
 #   python xml_to_sqlite.py input.xml -o output.db

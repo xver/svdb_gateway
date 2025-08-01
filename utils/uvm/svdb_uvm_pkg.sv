@@ -18,7 +18,7 @@ Defines structures for field and register information
 */
 
 /*
-Struct: field_info_t
+Variable: field_info_t
 Structure to hold field information from database
 
 This structure contains all the necessary information for a register field
@@ -51,7 +51,7 @@ typedef struct {
 } field_info_t;
   
 /*
-Struct: register_fields_t
+Variable: register_fields_t
 Structure to hold all fields for a register
 
 This structure contains an array of field information and a count of the
@@ -67,7 +67,7 @@ typedef struct {
 } register_fields_t;
   
 /*
-Struct: register_attributes_t
+Variable: register_attributes_t
 Structure to hold register attributes from database
 
 This structure contains all the necessary information for a register
@@ -114,7 +114,17 @@ typedef struct {
 /*
 Section: Package includes
 Includes all SVDB UVM components
+
+--- code
+
+`include "svdb_catcher.sv"
+`include "svdb_dynamic_reg.sv"
+`include "svdb_reg_model.sv"
+
+---
+
 */
+
 `include "svdb_catcher.sv"
 `include "svdb_dynamic_reg.sv"
 `include "svdb_reg_model.sv"
