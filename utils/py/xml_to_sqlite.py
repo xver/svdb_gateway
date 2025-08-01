@@ -147,6 +147,7 @@ class XMLToSQLite:
                 DROP TABLE IF EXISTS parameters;
                 DROP TABLE IF EXISTS vendorExtensions;
                 DROP TABLE IF EXISTS enumerations;
+                DROP TABLE IF EXISTS original_xml;
                 DROP TABLE IF EXISTS metadata;
             ''')
             self.cursor.executescript(schema)
@@ -267,50 +268,7 @@ class XMLToSQLite:
         self.conn.commit()
         return self.cursor.lastrowid
 
-    # Function: store_original_xml
-    #
-    # Store original XML content to preserve formatting and structure.
-    # This ensures that the original XML can be reconstructed exactly
-    # when converting back from the database.
-    #
-    # Parameters:
-    #   metadata_id (int) - ID of the metadata record
-    #   file_path (str)   - Path to source XML file
-    #
-    # Returns:
-    #   bool - True if successful, False otherwise
-    #
-    # Example:
-    #   success = converter.store_original_xml(metadata_id, "input.xml")
-    #   if success:
-    #       print("Original XML stored successfully")
-    def store_original_xml(self, metadata_id: int, file_path: str):
-        """Store the original XML content to preserve formatting, comments, and structure."""
-        try:
-            # Read the original XML file
-            with open(file_path, 'r', encoding='utf-8') as f:
-                xml_content = f.read()
 
-            # Get file modification time
-            last_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
-
-            # Calculate checksum
-            checksum = self.calculate_checksum(file_path)
-
-            # Store in the original_xml table
-            self.cursor.execute('''
-                INSERT INTO original_xml (
-                    metadata_id, xml_content, file_path, last_modified, checksum
-                ) VALUES (?, ?, ?, ?, ?)
-            ''', (metadata_id, xml_content, file_path, last_modified, checksum))
-
-            self.conn.commit()
-            logger.info(f"Stored original XML content for metadata_id {metadata_id}")
-            return True
-        except Exception as e:
-            logger.error(f"Error storing original XML content: {e}")
-            self.conn.rollback()
-            return False
 
     # Function: insert_memory_maps
     #
@@ -938,9 +896,6 @@ class XMLToSQLite:
                     logger.info(f"Processing component: {component_name} ({i+1}/{len(all_components)})")
 
                     metadata_id = self.insert_metadata(component_root, xml_file)
-
-                    # Store the original XML content
-                    self.store_original_xml(metadata_id, xml_file)
 
                     # Process memory maps
                     # Set current_metadata_id for use in register/addressBlock vendorExtensions

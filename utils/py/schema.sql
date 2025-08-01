@@ -397,17 +397,7 @@ CREATE TABLE enumerations (
     UNIQUE(field_id, name)
 );
 
--- Original XML table - stores the complete original XML content to preserve formatting, comments, and structure
-CREATE TABLE original_xml (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    metadata_id INTEGER NOT NULL,    -- Foreign key to metadata table
-    xml_content TEXT NOT NULL,       -- Complete original XML content
-    file_path TEXT NOT NULL,         -- Original file path
-    last_modified TIMESTAMP,         -- Last modification timestamp of the original file
-    checksum TEXT NOT NULL,          -- Checksum to verify file integrity
-    FOREIGN KEY (metadata_id) REFERENCES metadata(id) ON DELETE CASCADE,
-    UNIQUE(metadata_id)
-);
+
 
 -- Create indexes for better query performance
 CREATE INDEX idx_metadata_vendor ON metadata(vendor);
@@ -452,5 +442,4 @@ CREATE INDEX idx_ports_group_name ON ports(groupName);
 CREATE INDEX idx_parameters_scope ON parameters(scope);
 CREATE INDEX idx_parameters_data_type ON parameters(dataType);
 
--- Create index for original_xml table
-CREATE INDEX idx_original_xml_metadata ON original_xml(metadata_id); 
+ 
