@@ -24,6 +24,15 @@ import svdb_uvm_pkg::*;
 /*
 Section: REGBUS agent includes
 Includes all REGBUS protocol implementation files
+
+--- code
+`include "regbus_seq_item.sv"
+`include "regbus_driver.sv"
+`include "regbus_monitor.sv"
+`include "regbus_sequencer.sv"
+`include "regbus2reg_adapter.sv"
+---
+
 */
 `include "regbus_seq_item.sv"
 `include "regbus_driver.sv"
@@ -34,6 +43,13 @@ Includes all REGBUS protocol implementation files
 /*
 Section: Register model includes
 Includes register model and SVDB dynamic register files
+
+--- code
+`include "svdb_dynamic_reg.sv"
+`include "register_example_reg_model.sv"
+`include "regbus_agent.sv"
+---
+
 */
 `include "svdb_dynamic_reg.sv"
 `include "register_example_reg_model.sv"
@@ -42,6 +58,13 @@ Includes register model and SVDB dynamic register files
 /*
 Section: Environment and test includes
 Includes the UVM environment and test files
+
+--- code
+`include "env.sv"
+`include "test_register_block_sql_db.sv"
+`include "tb_top.sv"
+---
+
 */
 `include "env.sv"
 `include "test_register_block_sql_db.sv"

@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("row",["Section"],[["Row",,[[,"Single Row/Column Operations",,,0,"File:sqlite_primitive.h:Single_Row/Column_Operations"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("row",["Section","Function"],[["Row",,[[,"Single Row/Column Operations",,,0,"File:sqlite_primitive.h:Single_Row/Column_Operations"]]],["row_lookup_operations_test",,[["test_sqlite",,,,1,"File5:sv/test_sqlite.sv:test_sqlite.row_lookup_operations_test","SystemVerilogModule:test_sqlite:row_lookup_operations_test"]]]]);

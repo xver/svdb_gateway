@@ -28,6 +28,18 @@ enable, and handshake signals for reliable register access.
 Parameters:
   clk - Clock signal for the interface
   rst_n - Active-low reset signal
+
+--- code
+  interface regbus_if(input bit clk, input bit rst_n);
+  logic        psel;    // Peripheral select signal
+  logic        penable; // Peripheral enable signal
+  logic        pwrite;  // Write/read control signal
+  logic [31:0] paddr;   // Address bus
+  logic [31:0] pwdata;  // Write data bus
+  logic        pready;  // Peripheral ready signal
+  logic [31:0] prdata;  // Read data bus
+  logic        pslverr; // Slave error signal
+---
 */
 interface regbus_if(input bit clk, input bit rst_n);
   logic        psel;    // Peripheral select signal
@@ -42,7 +54,7 @@ interface regbus_if(input bit clk, input bit rst_n);
   import icecream_pkg::*;
 
   /*
-  Modport: DUT
+  Variable: DUT
   Modport for DUT (Device Under Test) connection
 
   This modport defines the signal directions for connecting to the DUT side
@@ -55,7 +67,7 @@ interface regbus_if(input bit clk, input bit rst_n);
   );
 
   /*
-  Modport: TB
+  Variable: TB
   Modport for testbench connection
 
   This modport defines the signal directions for connecting to the testbench side

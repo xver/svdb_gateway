@@ -7,7 +7,8 @@
  *
  * See LICENSE file in the project root for full license information.
  *
- * Description: UVM environment for REGBUS protocol with register model integration
+ * Description: 
+ *  - UVM environment for REGBUS protocol with register model integration
  */
 
 `ifndef ENV_SV
@@ -92,8 +93,8 @@ class env extends uvm_env;
   It also configures the register models in the configuration database for global
   access by sequences.
 
-  Parameter: phase
-  Current UVM phase
+  Parameter:
+    phase - Current UVM phase
   */
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
@@ -123,8 +124,8 @@ class env extends uvm_env;
   This function connects the monitor's analysis port to the environment's analysis
   port and sets up the register model sequencer connections with the REGBUS adapter.
 
-  Parameter: phase
-  Current UVM phase
+  Parameter:
+    phase - Current UVM phase
   */
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);

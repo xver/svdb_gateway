@@ -59,7 +59,7 @@ class test_register_block_sql_db extends uvm_test;
   endfunction
 
   /*
-  Task: run_phase
+  Function: run_phase
   Main test execution during the UVM run phase
 
   This task creates and starts the SVDB dynamic sequence to perform register

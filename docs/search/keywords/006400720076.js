@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("drv",["Variable"],[["drv",,[["regbus_agent",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus_agent.sv:regbus_agent.drv","SystemVerilogClass:regbus_agent:drv"]]]]);

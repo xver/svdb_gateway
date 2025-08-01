@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("off",["Section"],[["offset",,[[,"Register offset parameters",,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:Register_offset_parameters"]]]]);

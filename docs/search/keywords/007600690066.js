@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("vif",["Variable"],[["vif",,[["regbus_driver",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus_driver.sv:regbus_driver.vif","SystemVerilogClass:regbus_driver:vif"],["regbus_monitor",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus_monitor.sv:regbus_monitor.vif","SystemVerilogClass:regbus_monitor:vif"]]]]);

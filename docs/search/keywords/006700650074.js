@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("get",["Function"],[["get_metadata",,[["SQLiteToXML",,,,0,"File4:sqlite_to_xml.py:SQLiteToXML.get_metadata","PythonClass:SQLiteToXML:get_metadata"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("get",["Function"],[["get_row_operations_test",,[["test_sqlite",,,,0,"File5:sv/test_sqlite.sv:test_sqlite.get_row_operations_test","SystemVerilogModule:test_sqlite:get_row_operations_test"]]],["get_text",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.get_text","PythonClass:XMLToSQLite:get_text"]]]]);

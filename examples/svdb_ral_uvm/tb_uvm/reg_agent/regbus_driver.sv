@@ -63,7 +63,7 @@ class regbus_driver extends uvm_driver#(regbus_seq_item);
   endfunction
 
   /*
-  Task: run_phase
+  Function: run_phase
   Main execution loop for the REGBUS driver
 
   This task continuously processes sequence items from the sequencer, converts them

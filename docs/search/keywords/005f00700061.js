@@ -1,1 +1,0 @@
-﻿NDSearch.OnPrefixDataLoaded("_pa",["Function"],[["_parse_schema_columns",,[["SQLiteToXML",,,,0,"File4:sqlite_to_xml.py:SQLiteToXML._parse_schema_columns","PythonClass:SQLiteToXML:_parse_schema_columns"]]]]);

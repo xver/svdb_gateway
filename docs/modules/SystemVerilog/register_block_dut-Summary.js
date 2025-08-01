@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:register_block_dut","register_block_dut");NDSummary.OnSummaryLoaded("SystemVerilogModule:register_block_dut",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[90,0,0,"register_block_dut"]]);

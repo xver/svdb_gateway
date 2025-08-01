@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("File6:svdb_ral_uvm/tb_uvm/env/register_example_reg_model.sv","register_example_reg_model.sv");NDSummary.OnSummaryLoaded("File6:svdb_ral_uvm/tb_uvm/env/register_example_reg_model.sv",[["SystemVerilog","SystemVerilog"]],[["Files","File"]],[[253,0,0,"register_example_reg_model.sv","register_example_reg_model.sv"]]);

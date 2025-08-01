@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogClass:regbus_sequencer","regbus_sequencer");NDSummary.OnSummaryLoaded("SystemVerilogClass:regbus_sequencer",[["SystemVerilog","SystemVerilog"]],[["Classes","Class"],["Functions","Function"],["Groups","Group"]],[[21,0,0,"regbus_sequencer"],[22,0,2,"Functions","Functions"],[23,0,1,"new","new"]]);

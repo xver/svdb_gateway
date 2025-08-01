@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("File6:svdb_ral_uvm/tb_uvm/env/register_example_reg_model.sv",{253:"<div class=\"NDToolTip TFile LSystemVerilog\"><div class=\"TTSummary\">Copyright (c) 2025 IC Verimeter. All rights reserved.</div></div>"});

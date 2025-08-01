@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("__i",["Function"],[["__init__",,[["SQLiteToXML",,,,0,"File4:sqlite_to_xml.py:SQLiteToXML.__init__","PythonClass:SQLiteToXML:__init__"],["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.__init__","PythonClass:XMLToSQLite:__init__"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("__i",["Function"],[["__init__",,[["XMLToSQLite",,,,0,"File4:xml_to_sqlite.py:XMLToSQLite.__init__","PythonClass:XMLToSQLite:__init__"]]]]);

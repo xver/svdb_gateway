@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("bus",["Function"],[["bus2reg",,[["regbus2reg_adapter",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus2reg_adapter.sv:regbus2reg_adapter.bus2reg","SystemVerilogClass:regbus2reg_adapter:bus2reg"]]]]);

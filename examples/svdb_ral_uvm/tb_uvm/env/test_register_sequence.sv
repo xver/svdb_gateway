@@ -86,7 +86,7 @@ class svdb_dynamic_seq extends uvm_sequence#(regbus_seq_item);
   endfunction
 
   /*
-  Task: body
+  Function: body
   Main sequence execution body
 
   This task performs the following operations:

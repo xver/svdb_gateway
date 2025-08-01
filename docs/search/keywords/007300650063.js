@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sec",["Variable"],[["security_register",,[[,,,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:security_register"]]],["security_written",,[[,,,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:security_written"]]]]);

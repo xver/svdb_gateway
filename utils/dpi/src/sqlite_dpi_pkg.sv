@@ -30,8 +30,12 @@ Section: Data exchange structures and utilities
 */
 
 /*
-Variable: sqlite_data_type_e
+Enum: sqlite_data_type_e
 SQLite data types enumeration
+
+--- code
+typedef enum {SQLITE_NULL, SQLITE_INTEGER, SQLITE_FLOAT, SQLITE_TEXT, SQLITE_BLOB} sqlite_data_type_e;
+---
 
 Values:
 - SQLITE_NULL     - NULL value
@@ -39,6 +43,7 @@ Values:
 - SQLITE_FLOAT    - 64-bit IEEE floating point number
 - SQLITE_TEXT     - UTF-8 or UTF-16 string
 - SQLITE_BLOB     - Binary large object
+
 */
 /* verilator lint_off UNDRIVEN */
 typedef enum {SQLITE_NULL, SQLITE_INTEGER, SQLITE_FLOAT, SQLITE_TEXT, SQLITE_BLOB} sqlite_data_type_e;

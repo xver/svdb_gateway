@@ -1,8 +1,27 @@
+/*
+ * File: register_example_reg_model.sv
+ *
+ * Copyright (c) 2025 IC Verimeter. All rights reserved.
+ *
+ * Licensed under the MIT License.
+ *
+ * See LICENSE file in the project root for full license information.
+ *
+ * Description: 
+ *  - Comprehensive UVM register model example demonstrating various register types
+ *  - Dynamic reconfigurable registers with runtime field configuration
+ *  - Status registers with read-only fields for system monitoring
+ *  - Control registers with write-only fields for system control
+ *  - Configuration registers with read-write fields for system settings
+ *  - Security registers with access control and permission management
+ *  - Status flags registers with multiple bit fields for error monitoring
+ *  - Control bits registers for system feature control
+ *  - Complete register block with proper address mapping and access permissions
+ */
+
 `ifndef REGISTER_EXAMPLE_REG_MODEL_SV
 `define REGISTER_EXAMPLE_REG_MODEL_SV
-// register_example_reg_model.sv
 
-// Dynamically reconfigurable register
 class dynamic_config_reg extends svdb_dynamic_reg;
   `uvm_object_utils(dynamic_config_reg)
   
@@ -143,7 +162,6 @@ class control_bits_reg extends uvm_reg;
     mode_select.configure(.parent(this), .size(1), .lsb_pos(3), .access("RW"), .volatile(0), .reset(1'h0), .has_reset(1'h1), .is_rand(0), .individually_accessible(0));
   endfunction
 endclass
-
 
 class register_block extends uvm_reg_block;
   `uvm_object_utils(register_block)

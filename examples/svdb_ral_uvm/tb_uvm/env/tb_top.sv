@@ -29,7 +29,7 @@ module tb_top;
   regbus_if dut_if(clk, rst_n);
 
   /*
-  Instance: u_dut
+  variable: u_dut
   Device Under Test (DUT) instance
 
   This module instance represents the register block design that implements the
@@ -50,22 +50,10 @@ module tb_top;
   );
   
 
-  /*
-  Always block: Clock generation
-  Generates a 100MHz clock signal (10ns period)
-
-  This always block creates a continuous clock signal with a 50% duty cycle
-  for the testbench and DUT.
-  */
+ 
   always #5 clk = ~clk;
 
-  /*
-  Initial block: Reset generation
-  Generates the reset signal sequence
 
-  This initial block creates the reset sequence by asserting reset for 20ns
-  and then deasserting it to start normal operation.
-  */
   initial begin
     rst_n = 0;
     #20;
@@ -73,18 +61,10 @@ module tb_top;
 
   end
 
-  /*
-  Initial block: UVM test initialization
-  Initializes the UVM testbench and runs the test
-
-  This initial block sets up the virtual interface binding in the configuration
-  database and starts the UVM test execution.
-  */
   initial begin
     // Wildcard virtual interface binding
     uvm_config_db#(virtual regbus_if)::set(null, "*", "vif", dut_if);
     // Invoke compile test explicitly
-    //run_test("test_register_block_uvm_dynamic");
     run_test("test_register_block_sql_db");
   end
  

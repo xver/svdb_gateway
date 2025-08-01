@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("dut",["Variable"],[["DUT",,[["regbus_if",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus_if.sv:regbus_if.DUT","SystemVerilogClass:regbus_if:DUT"]]]]);

@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("classes.js",[[1,"SQLiteToXML"],[1,"XMLToSQLite"]]);
+﻿NDMenu.OnSectionLoaded("classes.js",[[2,"Python","PythonClass:",[[1,"XMLToSQLite"]]],[2,"SystemVerilog","SystemVerilogClass:",[[1,"env"],[1,"regbus_agent"],[1,"regbus_driver"],[1,"regbus_if"],[1,"regbus_monitor"],[1,"regbus_seq_item"],[1,"regbus_sequencer"],[1,"regbus2reg_adapter"],[1,"svdb_dynamic_seq"],[1,"test_register_block_sql_db"]]]]);

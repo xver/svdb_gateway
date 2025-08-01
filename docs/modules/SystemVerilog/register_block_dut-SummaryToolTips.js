@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("SystemVerilogModule:register_block_dut",{90:"<div class=\"NDToolTip TModule LSystemVerilog\"><div class=\"TTSummary\">Register block DUT implementing REGBUS protocol interface</div></div>"});

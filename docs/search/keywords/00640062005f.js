@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("db_",["Variable"],[["db_path",,[["svdb_dynamic_seq",,,,0,"File6:svdb_ral_uvm/tb_uvm/env/test_register_sequence.sv:svdb_dynamic_seq.db_path","SystemVerilogClass:svdb_dynamic_seq:db_path"]]]]);

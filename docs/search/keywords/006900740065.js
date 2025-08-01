@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("ite",["Variable"],[["item_collected_port",,[["regbus_monitor",,,,0,"File6:svdb_ral_uvm/tb_uvm/reg_agent/regbus_monitor.sv:regbus_monitor.item_collected_port","SystemVerilogClass:regbus_monitor:item_collected_port"]]]]);

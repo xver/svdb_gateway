@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("age",["Variable","Section"],[["agent",,[["env",,,,0,"File6:svdb_ral_uvm/tb_uvm/env/env.sv:env.agent","SystemVerilogClass:env:agent"],[,"REGBUS agent includes",,,1,"File6:svdb_ral_uvm/tb_uvm/env/testbench.sv:REGBUS_agent_includes"]]]]);

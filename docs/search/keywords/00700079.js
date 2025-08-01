@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("py",["File"],[["py",,[[,"sqlite_to_xml.py",,,0,"File4:sqlite_to_xml.py:sqlite_to_xml.py"],[,"xml_to_sqlite.py",,,0,"File4:xml_to_sqlite.py:xml_to_sqlite.py"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("py",["File"],[["py",,[[,"xml_to_sqlite.py",,,0,"File4:xml_to_sqlite.py:xml_to_sqlite.py"]]]]);

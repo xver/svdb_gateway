@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sta",["Variable"],[["status_flags",,[[,,,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:status_flags"]]],["status_register",,[[,,,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:status_register"]]]]);

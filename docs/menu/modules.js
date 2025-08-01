@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("modules.js",[[1,"test_sqlite"]]);
+﻿NDMenu.OnSectionLoaded("modules.js",[[1,"register_block_dut"],[1,"tb_top"],[1,"test_sqlite"]]);

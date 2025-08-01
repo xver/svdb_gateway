@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogClass:regbus_if","regbus_if");NDSummary.OnSummaryLoaded("SystemVerilogClass:regbus_if",[["SystemVerilog","SystemVerilog"]],[["Groups","Group"],["Interfaces","Interface"],["Variables","Variable"]],[[19,0,1,"regbus_if"],[259,0,0,"Variables","Variables"],[260,0,2,"DUT","DUT"],[261,0,2,"TB","TB"]]);

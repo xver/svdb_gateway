@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("def",["Section"],[["defines",,[[,"Common defines",,,0,"File:svdb_typedef.h:Common_defines"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("def",["Variable","Section"],[["default_map",,[["svdb_dynamic_seq",,,,0,"File6:svdb_ral_uvm/tb_uvm/env/test_register_sequence.sv:svdb_dynamic_seq.default_map","SystemVerilogClass:svdb_dynamic_seq:default_map"]]],["defines",,[[,"Common defines",,,1,"File:svdb_typedef.h:Common_defines"]]]]);

@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("par",["Section"],[["parameters",,[[,"Address and range parameters",,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:Address_and_range_parameters"],[,"Register offset parameters",,,0,"File6:svdb_ral_uvm/tb_uvm/rtl/design.sv:Register_offset_parameters"]]]]);
