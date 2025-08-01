@@ -1,4 +1,5 @@
 # Welcome to the **SVDB Gateway**! [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
+
 ![](https://github.com/xver/svdb_gateway/blob/main/docs/svdb_log_min.png)
 
 # SQLite Database Gateway for SystemVerilog
@@ -6,26 +7,29 @@
 ## Overview
 
 SVDB Gateway provides a bridge between SystemVerilog and SQLite databases, allowing SystemVerilog code to interact with SQLite databases through a Direct Programming Interface (DPI).
+
 ### Use Cases
 
 #### Hardware Verification
+
 - **Register Map Management**: Store and query register configurations during simulation
 - **Configuration Storage**: Persist test configurations and results
 - **Logging Systems**: Log simulation data and events to database
 - **Coverage Tracking**: Track verification coverage metrics
 
 #### IP-XACT Integration
+
 - **Component Libraries**: Convert IP-XACT component descriptions to database format
 - **Register Map Generation**: Generate register maps from IP-XACT descriptions
 - **Configuration Management**: Store and retrieve hardware configurations
 - **Version Control**: Track component versions and changes
 
 #### Database Operations
+
 - **CRUD Operations**: Complete Create, Read, Update, Delete functionality
 - **Transaction Management**: ACID-compliant database transactions
 - **Index Optimization**: Performance optimization through database indexing
 - **Schema Management**: Comprehensive database schema validation
-
 
 ## Project Structure
 
@@ -36,10 +40,16 @@ svdb_gateway/
 ├── examples/            # Example code and demonstrations
 │   ├── example_registers.xml      # IP-XACT component example
 │   ├── example_registers.db       # Generated SQLite database
-│   └── sv_regs/                   # SystemVerilog register examples
-│       ├── test_registers.sv      # Register testing module
-│       ├── sim_main.cpp           # verilator simulation entry
-│       └── Makefile               # Build configuration
+│   ├── sv_regs/                   # SystemVerilog register examples
+│   │   ├── test_registers.sv      # Register testing module
+│   │   ├── sim_main.cpp           # verilator simulation entry
+│   │   └── Makefile               # Build configuration
+│   └── svdb_ral_uvm/              # UVM RAL integration example
+│       ├── icecream_pkg.sv        # Debug utility package
+│       ├── test_register_sequence.sv  # Test sequence file
+│       ├── tb_uvm/                # UVM testbench components
+│       ├── sim/                   # Simulation files
+│       └── scripts/               # Build and run scripts
 ├── utils/
 │   ├── c/              # C utilities and primitives
 │   │   ├── include/    # C header files
@@ -50,7 +60,6 @@ svdb_gateway/
 │   ├── makedir/        # Build system and Makefiles
 │   ├── py/             # Python utilities
 │   │   ├── xml_to_sqlite.py  # XML to SQLite converter
-│   │   ├── sqlite_to_xml.py  # SQLite to XML converter
 │   │   └── schema.sql        # Database schema definition
 │   └── tests/          # Test suite
 │       ├── sv/         # SystemVerilog tests
@@ -60,49 +69,53 @@ svdb_gateway/
 │       │   └── Makefile          # Test build rules
 │       └── py/         # Python tests
 │           ├── test_xml_to_sqlite.py  # Test for xml_to_sqlite.py
-│           ├── test_sqlite_to_xml.py  # Test for sqlite_to_xml.py
 │           └── Makefile          # Makefile for running Python tests
 └── README.md           # This file
 ```
+
 ## HTML Documentation
+
  [API](https://rawcdn.githack.com/xver/svdb_gateway/006cad2a8c055f7b520c0ee1efae61d0952c2629/docs/index.html)
+
 ## Features
 
 ### Core Functionality
+
 - **SQLite Database Operations**: Complete CRUD operations from SystemVerilog
 - **DPI Bridge**: Direct Programming Interface for seamless integration
 - **IP-XACT Support**: XML to SQLite conversion for component descriptions
-- **Bidirectional Conversion**: XML ↔ SQLite conversion utilities
+- **XML to SQLite Conversion**: Convert IP-XACT XML files to SQLite database format
 - **Index Management**: Database indexing for performance optimization
 
 ### Advanced Features
+
 - **Register Management**: Specialized functions for hardware register operations
+- **UVM RAL Integration**: Complete UVM Register Abstraction Layer support with dynamic register configuration
 - **Cell-Level Access**: Granular data access with `get_cell_value` and `get_rowid_by_column_value`
 - **Schema Validation**: Comprehensive database schema validation
 - **Error Handling**: Robust error reporting and logging
 - **Multi-Namespace Support**: IP-XACT and SPIRIT namespace handling
 
 ### Testing & Verification
+
 - **Comprehensive Test Suite**: 11 test cases covering all major functionality
 - **Register Examples**: Real-world IP-XACT component testing
 - **Build System**: Automated compilation and testing with Verilator/VCS support
 
-## Recent Updates
+### Latest Changes
 
-### Latest Changes (v0.0.2)
-- **Enhanced DPI Functions**: Added `sqlite_dpi_get_rowid_by_column_value()` and `sqlite_dpi_get_cell_value()`
-- **Register Examples**: New `examples/sv_regs/` with comprehensive register testing
-- **Improved Testing**: Enhanced test coverage with 11 passing test cases
-- **Code Cleanup**: Removed problematic `sqlite_dpi_get_all_rows` function
-- **Better Documentation**: Updated comments and documentation throughout
+- **UVM RAL Integration**: Added UVM Register Abstraction Layer  with dynamic register configuration
+- **Database Schema Optimization**: updated SQLite tables and
 
 ### Support
+
 - For assistance with **SVDB Gateway** integration or customization, contact us at icshunt.help@gmail.com
 - Report bugs to [Issues](https://github.com/xver/svdb_gateway/issues)
 
 ## Requirements
 
 ### System Requirements
+
 - **C/C++ Compiler** (GCC recommended)
   - GCC 9.4.0 or later
   - Clang 12.0.0 or later
@@ -111,12 +124,17 @@ svdb_gateway/
   - libsqlite3-dev package
 
 ### Verification Tools
+
 - **For SystemVerilog Testing**:
   - Verilator 5.014 or later
   - Make 4.3 or later
 - **Optional**: VCS (Synopsys VCS) for alternative simulation
+- **For UVM RAL Examples**:
+  - UVM 2017 version with Verilator adoption (verified)
+  - UVM_HOME environment variable must be set to UVM installation directory
 
 ### Python Dependencies
+
 - **Python**: 3.8.0 or later
 - **Required Packages** (all built-in):
   - `sqlite3` (3.8.0 or later)
@@ -131,26 +149,101 @@ svdb_gateway/
 ## Quick Start
 
 ### Building the Project
+
 ```bash
 cd utils/makedir
 make
 ```
 
 ### Running SystemVerilog Tests
+
 ```bash
 cd utils/tests/sv
 make
 ```
 
 ### Running Register Examples
+
 ```bash
 cd examples/sv_regs
 make
 ```
 
+### Running UVM RAL Examples
+
+#### UVM Setup Requirements
+
+Before running the UVM RAL examples, ensure you have UVM properly installed and configured:
+
+1. **Install UVM**: Download and install UVM from [Accellera](https://accellera.org/downloads/standards/uvm).
+2. **Set UVM_HOME**: Set the environment variable to point to your UVM installation:
+
+   ```bash
+   export UVM_HOME=/path/to/uvm
+   ```
+3. **Verify Installation**: The Makefile will automatically check if UVM_HOME is properly set.
+
+#### Running the Example
+
+```bash
+cd examples/svdb_ral_uvm/scripts
+make
+```
+
+The UVM RAL example demonstrates advanced register testing using SVDB with UVM Register Abstraction Layer (RAL). This example includes:
+
+- **Dynamic Register Model**: Uses SVDB's dynamic register capabilities to configure registers from SQLite database
+- **UVM RAL Integration**: Complete UVM testbench with register agent, sequences, and coverage
+- **Multiple Register Types**: Demonstrates various register access types (RO, WO, RW) and configurations
+- **Database-Driven Testing**: Register definitions and configurations are loaded from SQLite database
+- **Comprehensive Test Sequences**: Includes read/write verification, access type validation, and error checking
+
+#### Example Structure
+
+```
+examples/svdb_ral_uvm/
+├── icecream_pkg.sv              # Debug utility package for SystemVerilog
+├── test_register_sequence.sv    # Main test sequence file
+├── tb_uvm/                      # UVM testbench components
+│   ├── env/                     # UVM environment and testbench
+│   │   ├── register_example_reg_model.sv  # Dynamic register model
+│   │   ├── test_register_sequence.sv      # Test sequences
+│   │   ├── testbench.sv                   # Main testbench
+│   │   ├── env.sv                         # UVM environment
+│   │   └── tb_top.sv                      # Top-level testbench
+│   ├── reg_agent/               # Register bus agent
+│   ├── rtl/                     # RTL design files
+│   └── tests/                   # Test files
+├── sim/                         # Simulation files
+│   └── files.f                  # File list for compilation
+└── scripts/                     # Build and run scripts
+    └── Makefile                 # Build configuration
+```
+
+#### Key Features
+
+- **Dynamic Register Configuration**: Registers are configured at runtime from SQLite database
+- **UVM RAL Compliance**: Full UVM Register Abstraction Layer implementation
+- **Multiple Access Types**: Supports RO (Read-Only), WO (Write-Only), and RW (Read-Write) registers
+- **Debug Utilities**: Includes IceCream package for enhanced debugging capabilities
+- **Automated Testing**: Complete test automation with Verilator/VCS support
+
+**Note**: This example was tested with UVM 1800.2-2017 with Verilator adoption changes.
+
+#### Troubleshooting UVM Setup
+
+If you encounter issues with the UVM RAL example:
+
+1. **UVM_HOME not set**: Ensure UVM_HOME points to a valid UVM installation
+   ```bash
+   echo $UVM_HOME
+   ls $UVM_HOME/src/uvm_pkg.sv
+   ```
+
 ## API Overview
 
 ### Core Database Operations
+
 ```systemverilog
 // Database connection management
 chandle db = sqlite_dpi_open_database("database.db");
@@ -188,6 +281,7 @@ sqlite_dpi_vacuum_database(db);
 The project includes comprehensive Makefiles with multiple targets and configuration options:
 
 ### Available Targets
+
 - `make` or `make all`: Default target - clean, compile, and run simulation
 - `make debug`: Same as all but with verbose debugging enabled
 - `make svdb_compile`: Compiles the SVDB C libraries
@@ -199,6 +293,7 @@ The project includes comprehensive Makefiles with multiple targets and configura
 - `make help`: Displays detailed help information
 
 ### Configuration Variables
+
 - `OUTPUT_DIR`: Directory for output files (default: .)
 - `VERILATOR`: Path to Verilator executable (default: verilator)
 - `SVDB_HOME`: Path to svdb_gateway root directory (auto-detected)
@@ -206,6 +301,7 @@ The project includes comprehensive Makefiles with multiple targets and configura
 - `SIM`: Selects simulator (default: verilator, option: vcs)
 
 ### Example Usage
+
 ```bash
 # Run all targets
 make
@@ -218,9 +314,9 @@ make debug
 # Run with custom output directory
 make OUTPUT_DIR=./output
 
-# Run with VCS simulator
-make SIM=vcs
-make or make SIM=verilator (default)
+# Run UVM example
+cd examples/svdb_ral_uvm/scripts
+make
 
 # Show help information
 make help
@@ -231,39 +327,31 @@ make help
 The project includes powerful Python utilities for XML and SQLite database operations:
 
 ### XML to SQLite Conversion
+
 Convert IP-XACT XML files to SQLite database format:
+
 ```bash
 cd utils/py
 python3 xml_to_sqlite.py input.xml -o database.db [-d]
 ```
+
 or process multiple files:
+
 ```bash
 python3 xml_to_sqlite.py -f file_list.txt -o database.db [-d]
-```
-
-### SQLite to XML Conversion
-Convert SQLite database back to IP-XACT XML format:
-```bash
-cd utils/py
-python3 sqlite_to_xml.py -i database.db -o output.xml [-d] [--force-namespace ipxact|spirit] [--validate-schema]
 ```
 
 ### Command-line Options
 
 #### XML to SQLite Options
+
 - `xml_file`: Input XML file (positional argument)
 - `-f, --file-list`: File containing list of XML files to process
 - `-o, --output`: Output SQLite database path (required)
 - `-d, --debug`: Enable debug logging (optional)
 
-#### SQLite to XML Options
-- `-i, --input`: Input SQLite database path (required)
-- `-o, --output`: Output XML file path (required)
-- `-d, --debug`: Enable debug logging (optional)
-- `--force-namespace`: Force specific namespace (ipxact or spirit)
-- `--validate-schema`: Validate database schema against schema.sql
-
 ### Example Usage
+
 ```bash
 # Convert single XML file to SQLite
 python3 xml_to_sqlite.py design.xml -o design.db
@@ -273,28 +361,24 @@ echo "design1.xml" > file_list.txt
 echo "design2.xml" >> file_list.txt
 python3 xml_to_sqlite.py -f file_list.txt -o design.db
 
-# Convert SQLite to XML with debug logging and schema validation
-python3 sqlite_to_xml.py -i design.db -o design.xml -d --validate-schema
 
-# Convert SQLite to XML forcing IP-XACT namespace
-python3 sqlite_to_xml.py -i design.db -o design.xml --force-namespace ipxact
 ```
 
 ## Python Tests
 
-The project includes sanity level Python tests to verify the functionality of the Python utilities:
+The project includes sanity-level Python tests to verify the functionality of the Python utilities:
 
 ### Running Python Tests
+
 ```bash
 cd utils/tests/py
 make
 ```
 
 ### Available Test Targets
-- `make test_xml_to_sqlite`: Run the test for `xml_to_sqlite.py`
-- `make test_sqlite_to_xml`: Run the test for `sqlite_to_xml.py`
-- `make help`: Display help information for the available targets
 
+- `make test_xml_to_sqlite`: Run the test for `xml_to_sqlite.py`
+- `make help`: Display help information for the available targets
 
 ## Test Results
 
@@ -309,6 +393,5 @@ Tests Passed: 11, Tests Failed: 0, Total: 11
 
 Released under the MIT License. See LICENSE file for details.
 
-!["Copyright (c) 2025 IC Verimeter"](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
+![](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
 Copyright (c) 2025 IC Verimeter
-
