@@ -4,15 +4,15 @@
 
 # SQLite Database Gateway for SystemVerilog
 
-## Overview
+## Overview [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 SVDB Gateway provides a bridge between SystemVerilog and SQLite databases, allowing SystemVerilog code to interact with SQLite databases through a Direct Programming Interface (DPI).
 
-Also, check out other open-source projects by IC Verimeter:
+Also, check out other open-source projects by IC Verimeter: 
  - [The Shunt](https://github.com/xver/Shunt): An Open Source Client/Server TCP/IP socket-based communication library designed for integrating SystemVerilog simulations with external applications in C, SystemC, and Python.
  - [icecream_sv](https://github.com/xver/icecream_sv): A Simplified Debugging Tool for SystemVerilog.Inspired by [IceCream](https://github.com/gruns/icecream) style debugging tools.
 
-### Use Cases
+### Use Cases [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 #### Hardware Verification
 
@@ -21,7 +21,7 @@ Also, check out other open-source projects by IC Verimeter:
 - **Logging Systems**: Log simulation data and events to database
 - **Coverage Tracking**: Track verification coverage metrics
 
-#### IP-XACT Integration
+ IP-XACT Integration
 
 - **Component Libraries**: Convert IP-XACT component descriptions to database format
 - **Register Map Generation**: Generate register maps from IP-XACT descriptions
@@ -35,7 +35,7 @@ Also, check out other open-source projects by IC Verimeter:
 - **Index Optimization**: Performance optimization through database indexing
 - **Schema Management**: Comprehensive database schema validation
 
-## Project Structure
+## Project Structure [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ```
 svdb_gateway/
@@ -77,11 +77,11 @@ svdb_gateway/
 └── README.md           # This file
 ```
 
-## HTML Documentation
+## HTML Documentation [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
  [API](https://rawcdn.githack.com/xver/svdb_gateway/ef452153546004b6913291132ab51816c446a68d/docs/index.html)
 
-## Features
+## Features [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ### Core Functionality
 
@@ -116,7 +116,7 @@ svdb_gateway/
 - For assistance with **SVDB Gateway** integration or customization, contact us at icshunt.help@gmail.com
 - Report bugs to [Issues](https://github.com/xver/svdb_gateway/issues)
 
-## Requirements
+## Requirements [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ### System Requirements
 
@@ -150,7 +150,7 @@ svdb_gateway/
   - `typing` (3.8.0 or later)
   - `os` (3.8.0 or later)
 
-## Quick Start
+## Quick Start [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ### Building the Project
 
@@ -244,7 +244,7 @@ If you encounter issues with the UVM RAL example:
    ls $UVM_HOME/src/uvm_pkg.sv
    ```
 
-## API Overview
+## API Overview [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ### Core Database Operations
 
@@ -280,7 +280,7 @@ sqlite_dpi_drop_index(db, "index_name");
 sqlite_dpi_vacuum_database(db);
 ```
 
-## Makefile Help
+## Makefile Help [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 The project includes comprehensive Makefiles with multiple targets and configuration options:
 
@@ -304,7 +304,7 @@ The project includes comprehensive Makefiles with multiple targets and configura
 - `DEBUG`: Set to 1 to enable verbose debugging
 - `SIM`: Selects simulator (default: verilator, option: vcs)
 
-### Example Usage
+### Example Usage 
 
 ```bash
 # Run all targets
@@ -326,7 +326,7 @@ make
 make help
 ```
 
-## Python Utilities
+## Python Utilities [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 The project includes powerful Python utilities for XML and SQLite database operations:
 
@@ -368,7 +368,7 @@ python3 xml_to_sqlite.py -f file_list.txt -o design.db
 
 ```
 
-## Python Tests
+## Python Tests [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 The project includes sanity-level Python tests to verify the functionality of the Python utilities:
 
@@ -384,7 +384,7 @@ make
 - `make test_xml_to_sqlite`: Run the test for `xml_to_sqlite.py`
 - `make help`: Display help information for the available targets
 
-## Test Results
+## Test Results [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 The project includes a comprehensive test suite with **11 test cases**:
 
@@ -393,7 +393,7 @@ OVERALL TEST RESULT: PASS @0
 Tests Passed: 11, Tests Failed: 0, Total: 11
 ```
 
-## License
+## License [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 Released under the MIT License. See LICENSE file for details.
 
