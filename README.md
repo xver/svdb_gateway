@@ -8,6 +8,10 @@
 
 SVDB Gateway provides a bridge between SystemVerilog and SQLite databases, allowing SystemVerilog code to interact with SQLite databases through a Direct Programming Interface (DPI).
 
+Also check out other open-source projects by IC Verimeter:
+ - [The Shunt: An Open Source Client/Server TCP/IP socket-based communication library designed for integrating SystemVerilog simulations with external applications in C, SystemC, and Python](https://github.com/xver/Shunt)
+ - [icecream_sv: A Simplified Debugging Tool for SystemVerilog](https://github.com/xver/icecream_sv)  Inspired by [IceCream](https://github.com/gruns/icecream) style debugging tools.
+
 ### Use Cases
 
 #### Hardware Verification
