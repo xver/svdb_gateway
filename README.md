@@ -75,7 +75,7 @@ svdb_gateway/
 
 ## HTML Documentation
 
- [API](https://rawcdn.githack.com/xver/svdb_gateway/006cad2a8c055f7b520c0ee1efae61d0952c2629/docs/index.html)
+ [API](https://rawcdn.githack.com/xver/svdb_gateway/ef452153546004b6913291132ab51816c446a68d/docs/index.html)
 
 ## Features
 
