@@ -132,7 +132,10 @@ svdb_gateway/
 - **For SystemVerilog Testing**:
   - Verilator 5.014 or later 
   - Make 4.3 or later
-    **Note**: The UVM example is broken in the latest Verilator 5.041 (development revision v5.040-1-g4eb030717).
+  
+  **Note**: The UVM example is broken in the latest Verilator 5.041 (development revision v5.040-1-g4eb030717).
+
+  `Error example: %Error: svdb_gateway/utils/uvm/svdb_catcher.sv:28:12: Reference to 'uvm_object_registry' before declaration (IEEE 1800-2023 6.18)`
     
 - **Optional**: VCS (Synopsys VCS) for alternative simulation
 - **For UVM RAL Examples**:
