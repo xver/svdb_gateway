@@ -130,10 +130,11 @@ svdb_gateway/
 ### Verification Tools
 
 - **For SystemVerilog Testing**:
-  - Verilator 5.014 or later 
+  - Verilator 5.039 devel (gh pr checkout 6224)
   - Make 4.3 or later
   
   **Note**: The UVM example is broken in the latest Verilator 5.041 (development revision v5.040-1-g4eb030717).
+ 
 
   `Error example: %Error: svdb_gateway/utils/uvm/svdb_catcher.sv:28:12: Reference to 'uvm_object_registry' before declaration (IEEE 1800-2023 6.18)`
     
