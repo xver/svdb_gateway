@@ -130,8 +130,10 @@ svdb_gateway/
 ### Verification Tools
 
 - **For SystemVerilog Testing**:
-  - Verilator 5.014 or later
+  - Verilator 5.014 or later 
   - Make 4.3 or later
+    **Note**: The UVM example is broken in the latest Verilator 5.041 (development revision v5.040-1-g4eb030717).
+    
 - **Optional**: VCS (Synopsys VCS) for alternative simulation
 - **For UVM RAL Examples**:
   - UVM 2017 version with Verilator adoption (verified)
