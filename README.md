@@ -1,6 +1,6 @@
 # Welcome to the **SVDB Gateway**! [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
-![](https://github.com/xver/svdb_gateway/blob/main/docs/svdb_log_min.png)
+![](https://github.com/xver/svdb_gateway/blob/main/docs/svdb_log.jpg)
 
 # SQLite Database Gateway for SystemVerilog
 
