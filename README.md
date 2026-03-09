@@ -35,6 +35,11 @@ Also, check out other open-source projects by IC Verimeter:
 - **Index Optimization**: Performance optimization through database indexing
 - **Schema Management**: Comprehensive database schema validation
 
+### Articles/Conference papers
+*  SVDB Gateway Introduction:
+   - Victor Besyakov  "Database Driven RTL Simulation: Fighting Billion-Gate Verification Bottlenecks" DVCon U.S. March 2026
+  https://www.researchgate.net/publication/401658199_Database_Driven_RTL_Simulation_Fighting_Billion-Gate_Verification_Bottlenecks
+
 ## Project Structure [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
 ```
