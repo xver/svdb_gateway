@@ -409,4 +409,4 @@ Tests Passed: 11, Tests Failed: 0, Total: 11
 Released under the MIT License. See LICENSE file for details.
 
 ![](https://github.com/xver/svdb_gateway/blob/main/docs/IcVerimeter_logo.png)
-Copyright (c) 2025 IC Verimeter
+Copyright (c) 2025-2026 IC Verimeter
