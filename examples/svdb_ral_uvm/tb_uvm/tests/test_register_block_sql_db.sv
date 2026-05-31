@@ -13,6 +13,8 @@
 `ifndef TEST_REGISTER_BLOCK_SQL_DB_SV
 `define TEST_REGISTER_BLOCK_SQL_DB_SV
 
+typedef class svdb_dynamic_seq;
+
 /*
 Class: test_register_block_sql_db
 UVM test for REGBUS protocol with SQLite database integration

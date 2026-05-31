@@ -13,6 +13,7 @@
 /* verilator lint_off UNUSED */
 /* verilator lint_off UNDRIVEN */
 /* verilator lint_off VARHIDDEN */
+/* verilator lint_off IMPLICITSTATIC */
 
 module test_registers (input reg clk_i);
 

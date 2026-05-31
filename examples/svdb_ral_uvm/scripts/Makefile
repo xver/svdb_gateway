@@ -25,6 +25,7 @@ UVM_TESTNAME ?= top_test
 VERILATOR_FLAGS = --timescale 1ns/1ps \
 		--trace \
 		-Wall \
+		-Wno-EOFNEWLINE \
 		-Wno-UNUSED \
 		-Wno-UNDRIVEN \
 		-Wno-VARHIDDEN \

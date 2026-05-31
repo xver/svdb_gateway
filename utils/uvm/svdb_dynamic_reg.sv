@@ -358,12 +358,12 @@ endfunction // new
 
 
 function bit svdb_dynamic_reg::test_table_existence();
-  $display("\n[TEST 1] Checking if registers table exists...");
+  `uvm_info("RegModel", "\n Checking if registers table exists...", UVM_MEDIUM)
   if (sqlite_dpi_table_exists(SqliteDB, "registers") > 0) begin
-     $display("PASS: registers table exists");
+     `uvm_info("RegModel", "PASS: registers table exists", UVM_MEDIUM)
      return 1'b1;
   end else begin
-     $display("ERROR: registers table does not exist");
+     `uvm_error("RegModel", "ERROR: registers table does not exist")
      return 1'b0;
   end
 endfunction // test_table_existence

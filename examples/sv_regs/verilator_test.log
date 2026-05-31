@@ -38,19 +38,19 @@ PASS: Found control_bits with row ID: 6
 
 Looking for register: status_register
 PASS: Found status_register with row ID: 1
-  Name: status_register, AddressOffset: 'h0, Size: 32, Access: read-only, ResetValue: 1'h0
+  Name: status_register, AddressOffset: 'h0, Size: 32, Access: read-only, ResetValue: 32'h00000000
 
 Looking for register: control_register
 PASS: Found control_register with row ID: 2
-  Name: control_register, AddressOffset: 'h4, Size: 32, Access: write-only, ResetValue: 1'h1
+  Name: control_register, AddressOffset: 'h4, Size: 32, Access: write-only, ResetValue: 32'h00000000
 
 Looking for register: configuration_register
 PASS: Found configuration_register with row ID: 3
-  Name: configuration_register, AddressOffset: 'h8, Size: 32, Access: read-write, ResetValue: 2'h2
+  Name: configuration_register, AddressOffset: 'h8, Size: 32, Access: read-write, ResetValue: 32'h00000000
 
 Looking for register: security_register
 PASS: Found security_register with row ID: 4
-  Name: security_register, AddressOffset: 'hC, Size: 32, Access: read-writeOnce, ResetValue: 2'h3
+  Name: security_register, AddressOffset: 'hC, Size: 32, Access: read-writeOnce, ResetValue: 32'h00000000
 
 Looking for register: status_flags
 PASS: Found status_flags with row ID: 5
@@ -72,5 +72,5 @@ Querying hdlPath for register: control_bits
 
 [SVDB] Register Table Iteration Test: PASS
 Tests Passed: 5, Tests Failed: 0, Total: 5
-- test_registers.sv:77: Verilog $finish
+- test_registers.sv:78: Verilog $finish
 Simulation complete. Test log file generated: ./verilator_test.log

@@ -23,8 +23,10 @@ occur during dynamic register model setup and configuration.
 
 Inherits: uvm_report_catcher
 */
+
 class svdb_catcher extends uvm_report_catcher;
- 
+
+
   `uvm_object_utils(svdb_catcher)
 
   /*

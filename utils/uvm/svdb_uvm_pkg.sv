@@ -12,6 +12,20 @@
 
 package svdb_uvm_pkg;
 
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+// Forward typedefs for UVM classes to resolve compilation order issues
+typedef class uvm_object_registry;
+typedef class uvm_component;
+typedef class uvm_object_wrapper;
+typedef class uvm_object;
+typedef class uvm_reg_field;
+typedef class uvm_reg;
+typedef class uvm_reg_block;
+typedef class uvm_report_catcher;
+typedef uvm_reg_data_t;
+
 /*
 Section: Data structures for SVDB register abstraction
 Defines structures for field and register information
@@ -49,7 +63,7 @@ typedef struct {
   int volatile_val;
   int has_reset_val;
 } field_info_t;
-  
+
 /*
 Variable: register_fields_t
 Structure to hold all fields for a register
@@ -65,7 +79,7 @@ typedef struct {
   field_info_t fields[];
   int num_fields;
 } register_fields_t;
-  
+
 /*
 Variable: register_attributes_t
 Structure to hold register attributes from database
