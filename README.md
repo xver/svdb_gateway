@@ -11,6 +11,7 @@ SVDB Gateway provides a bridge between SystemVerilog and SQLite databases, allow
 Also, check out other open-source projects by IC Verimeter: 
  - [The Shunt](https://github.com/xver/Shunt): An Open Source Client/Server TCP/IP socket-based communication library designed for integrating SystemVerilog simulations with external applications in C, SystemC, and Python.
  - [icecream_sv](https://github.com/xver/icecream_sv): A Simplified Debugging Tool for SystemVerilog.Inspired by [IceCream](https://github.com/gruns/icecream) style debugging tools.
+ -  [SV ND Scribe](https://github.com/xver/sv-nd-scribe): A SystemVerilog toolkit combining NaturalDocs-based documentation rules, a static linter, and a VS Code extension for real-time in-editor feedback.
 
 ### Use Cases [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/xver)
 
